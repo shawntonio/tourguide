@@ -12,6 +12,11 @@ class Tours extends Component {
 		return (
 			<div>
 				<header>
+					<Link to='/make-tour'>
+						<button>
+							Create a Tour
+						</button>
+					</Link>
 					<Link to='/account'>
 						<div>Account</div>
 					</Link>
