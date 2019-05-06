@@ -7,9 +7,9 @@ module.exports = {
 		const {session} = req
 
 		//check for duplicate accounts
-		const emailTaken = await db.checkEmail({email})
+		let emailTaken = await db.checkEmail({email})
 		emailTaken = +emailTaken[0].count
-		const usernameTaken = await db.checkUsername({username})
+		let usernameTaken = await db.checkUsername({username})
 		usernameTaken = +usernameTaken[0].count
 		if (emailTaken || usernameTaken) {
 			return res.sendStatus(409)
@@ -28,5 +28,16 @@ module.exports = {
 			hash
 		})
 
-	}
+		//login
+		session.user = {
+			username,
+			hash,
+			login_id: user_id[0].id
+		}
+
+		res.sendStatus(200)
+	},
+
+	
+	
 }
