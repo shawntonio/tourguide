@@ -1,12 +1,13 @@
-import React, {Component} from 'react'
-import axios from 'axios'
-import Map from '../maps/Map'
-require('dotenv').config()
-const {REACT_APP_GOOGLE_KEY} = process.env
+import React, { Component } from 'react';
+import axios from 'axios';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-export default class TourInfo extends Component {
+import Map from '../maps/chooseMap';
+import { updateUser } from '../../store';
+
+class TourInfo extends Component {
 	state = {
-		showMap: false,
 		name: '',
 		location: {},
 		costs: null,
@@ -14,46 +15,49 @@ export default class TourInfo extends Component {
 		type: '',
 		time: '',
 		difficulty: '',
-		// live: false
 	}
 
-
 	componentDidMount() {
-		axios.post(`https://www.googleapis.com/geolocation/v1/geolocate?key=${REACT_APP_GOOGLE_KEY}`).then(res => {
-			this.setState({location: res.data.location})
-		}).catch(err => console.log(err))
+		axios.get('/auth/user').then(res => {
+			const { login_id, username } = res.data
+			if (!login_id) {
+				this.props.history.push('/account')
+			} else {
+				this.props.updateUser(login_id, username)
+			}
+		})
 	}
 
 	clickLocation = (location) => {
-		this.setState({location})
+		this.setState({ location })
 	}
 
 	inputHandler = (e) => {
-		const {name, value} = e.target
-		this.setState({[name]: value})
+		const { name, value } = e.target
+		this.setState({ [name]: value })
 	}
 
-	showMap = () => {
-		this.setState({showMap: true})
-	}
-	hideMap = () => {
-		this.setState({showMap: false})
-		this.componentDidMount()
+	createTourHandler = (e) => {
+		e.preventDefault()
+		axios.post('/api/tours', this.state).then(() => {
+			this.props.history.push('/my-tours')
+		}).catch(err => console.log(err))
+		
 	}
 
 	render() {
-		const {name, costs, price, type, time, difficulty} = this.state
+		const { name, costs, price, type, time, difficulty } = this.state
 		return (
 			<div>
 				<h1>Create a Tour</h1>
-				<form>
+				<form onSubmit={this.createTourHandler}>
 					<div className="inputs">
-						<h4>Tour Name:</h4>
-						<input name='name' value={name} type="text" onChange={this.inputHandler}/>
+						<label>Tour Name:</label>
+						<input name='name' value={name} type="text" onChange={this.inputHandler} />
 					</div>
 
 					<div className="inputs">
-						<h4>Type of Tour</h4>
+						<label>Type of Tour</label>
 						<select name="type" value={type} onChange={this.inputHandler} >
 							<option value="choose">choose</option>
 							<option value="city">City Tour</option>
@@ -65,22 +69,22 @@ export default class TourInfo extends Component {
 					</div>
 
 					<div className="inputs">
-						<h4>Duration</h4>
-						<input name='time' value={time} type="text" onChange={this.inputHandler}/>
+						<label>Duration (hours)</label>
+						<input name='time' value={time} type="number" onChange={this.inputHandler} />
 					</div>
 
 					<div className="inputs">
-						<h4>Associated Costs</h4>
-						<input name='costs' value={costs} type="number" onChange={this.inputHandler}/>
+						<label>Associated Costs</label>
+						<input name='costs' value={costs} type="number" onChange={this.inputHandler} />
 					</div>
 
 					<div className="inputs">
-						<h4>Price of Tour</h4>
-						<input name='price' value={price} type="number" onChange={this.inputHandler}/>
+						<label>Price of Tour</label>
+						<input name='price' value={price} type="number" onChange={this.inputHandler} />
 					</div>
 
 					<div className="inputs">
-						<h4>Difficulty</h4>
+						<label>Difficulty</label>
 						<select name="difficulty" value={difficulty} onChange={this.inputHandler}>
 							<option value="choose">choose</option>
 							<option value="easy">Easy</option>
@@ -88,23 +92,17 @@ export default class TourInfo extends Component {
 							<option value="hard">Hard</option>
 						</select>
 					</div>
+					<Map clickLocation={this.clickLocation} currentLocation={this.state.location} />
 
-					<div className="inputs">
-						<h4>Starting Location</h4>
-						<div>
-							<input onClick={this.hideMap} type="radio" name="location"/>
-							<label>Use Current Location</label>
-						</div>
-
-						<div>
-							<input onClick={this.showMap} type="radio" name="location" />
-							<label>Choose from map</label>
-						</div>
-					</div>
-					{this.state.showMap && <Map clickLocation={this.clickLocation} currentLocation={this.state.location} gKey={REACT_APP_GOOGLE_KEY} />}			
+					<button>Create Tour</button>
 				</form>
-				
+
 			</div>
 		)
 	}
 }
+const mapDispatchToProps = {
+	updateUser
+}
+
+export default connect(null, mapDispatchToProps)(withRouter(TourInfo))

@@ -4,9 +4,16 @@ import {Link} from 'react-router-dom'
 
 import LoginForm from './LoginRegisterForm'
 import Profile from './Profile'
+import Axios from 'axios';
+import {updateUser} from '../../store';
 
 class Account extends Component {
-
+	componentDidMount() {
+		Axios.get('/auth/user').then(res => {
+				const {login_id, username} = res.data
+				this.props.updateUser(login_id, username)
+		})
+	}
 	
 	render() {
 		return (
@@ -16,6 +23,7 @@ class Account extends Component {
 					<Link to="/">
 						close
 					</Link>
+				
 				</header>
 				{
 					this.props.username ? <Profile />
@@ -31,4 +39,8 @@ const mapStateToProps = state => {
 	return { username }
 }
 
-export default connect(mapStateToProps)(Account)
+const mapDispatchToProps = {
+	updateUser
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Account)
