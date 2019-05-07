@@ -1,10 +1,29 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
+import Axios from 'axios';
+import {connect} from 'react-redux';
 
-export default class Profile extends Component {
+import {clearUser} from '../../store'
+
+class Profile extends Component {
+
+	logout = () => {
+		Axios.get('/auth/logout').then(() => {
+			this.props.clearUser()
+		})
+	}
 
 	render() {
 		return (
-			<>Profile</>
+			<>
+				<button onClick={this.logout}>Logout</button>
+				<button>My Tours</button>
+			</>
 		)
 	}
 }
+
+const mapDispatchToProps = {
+	clearUser
+}
+
+export default connect(null, mapDispatchToProps)(Profile)

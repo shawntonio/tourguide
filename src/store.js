@@ -16,11 +16,19 @@ export function updateUser(id, username) {
 	}
 }
 
+export function clearUser() {
+	return {
+		type: CLEAR_USER,
+	}
+}
+
 const userReducer = (state = initialState, action) => {
 	const {type, payload} = action
 	switch(type) {
 		case SET_USER:
 			return {...state, ...payload}
+		case CLEAR_USER:
+			return initialState
 		default:
 			return state
 	}
