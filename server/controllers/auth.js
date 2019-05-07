@@ -12,7 +12,7 @@ module.exports = {
 		let usernameTaken = await db.checkUsername({username})
 		usernameTaken = +usernameTaken[0].count
 		if (emailTaken || usernameTaken) {
-			return res.sendStatus(409)
+			return res.status(409).send('email or username is taken. Please log in if you have an account.')
 		}
 
 		//secure password
@@ -31,13 +31,39 @@ module.exports = {
 		//login
 		session.user = {
 			username,
-			hash,
 			login_id: user_id[0].id
 		}
 
-		res.sendStatus(200)
+		res.status(200).send(session.user)
 	},
 
+	async login(req, res){
+		const db = req.app.get('db')
+		const {username, password} = req.body
+
+		const foundUser = await db.getUser({username})
+		const user = foundUser[0]
+
+		if (!user) {
+			return res.status(401).send('User not found. Register as a new user first')
+		}
+
+		const isAuthenticated = bcrypt.compareSync(password, user.hash)
+
+		if (!isAuthenticated) {
+			return res.status(403).send('Incorrect username or password')
+		}
+
+		req.session.user = {
+			username,
+			login_id: user.id
+		}
+
+		res.status(200).send(req.session.user)
+	},
 	
-	
+	logout(req, res) {
+		req.session.destroy()
+		res.sendStatus(200)
+	}
 }

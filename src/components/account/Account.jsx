@@ -1,39 +1,42 @@
 import React, {Component} from 'react'
-import auth from '../../auth/Auth'
+import {Switch, Route} from 'react-router-dom'
+import {connect} from 'react-redux'
 
-export default class Account extends Component {
+import LoginForm from './LoginForm'
+import RegisterForm from './RegisterForm'
+import Profile from './Profile'
 
-	login = () => {
-		// this.props.auth.login();
-	}
-
-	logout = () => {
-		// this.props.auth.logout();
-	}
-
-	componentDidMount() {
-		// if (localStorage.getItem('isLoggedIn') === 'true') {
-		// 	auth.renewSession();
-		// }
-	}
+class Account extends Component {
 
 	render() {
-		// const {isAuthenticated} = auth
-
+		console.log(this.props.username)
 		return (
 			<div>
-				account
-				{/* {
-					!isAuthenticated() && (
-						<button onClick={this.login}>Log In</button>
+				<header>
+					Account
+				</header>
+				{
+					this.props.username ? <Profile />
+					: (
+						<div>
+							<button>Login</button>
+							<button>Register</button>
+						</div>
 					)
 				}
-				{
-					isAuthenticated() && (
-						<button onClick={this.logout}>Log Out</button>
-					)
-				} */}
+
+				<Switch>
+					<Route path="/account/login" component={LoginForm} />
+					<Route path="/account/register" component={RegisterForm} />
+				</Switch>
 			</div>
 		)
 	}
 }
+
+const mapStateToProps = state => {
+	const {username} = state
+	return { username }
+}
+
+export default connect(mapStateToProps)(Account)

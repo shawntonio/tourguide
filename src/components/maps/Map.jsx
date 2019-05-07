@@ -6,30 +6,29 @@ const AnyReactComponent = ({ text }) => <div>{text}</div>;
 class SimpleMap extends Component {
 	state = {
 		location: this.props.currentLocation
-	}
-	
-	static defaultProps = {
-    center: {
-      lat: 59.95,
-      lng: 30.33
-    },
-    zoom: 11
-  };
+  }
+ 
+  _onClick = ({x, y, lat, lng}) => {
+    // this.setState({location: {lat, lng}})
+    this.props.clickLocation({lat, lng})
+  }
  
   render() {
-		
+    const {currentLocation: loc} = this.props
     return (
       <div style={{ height: '50vh', width: '100%' }}>
         <GoogleMapReact
+          onClick={this._onClick}
           bootstrapURLKeys={{ key: this.props.gKey }}
-          defaultCenter={this.state.location}
-          defaultZoom={this.props.zoom}
+          center={loc}
+          defaultZoom={17}
+          
         >
-          {/* <AnyReactComponent
-            lat={59.955413}
-            lng={30.337844}
+          <AnyReactComponent
+            lat={loc.lat}
+            lng={loc.lng}
             text="My Marker"
-          /> */}
+          />
         </GoogleMapReact>
       </div>
     );

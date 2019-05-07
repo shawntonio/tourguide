@@ -19,38 +19,26 @@ export default class TourInfo extends Component {
 
 
 	componentDidMount() {
-		axios.post(`https://www.googleapis.com/geolocation/v1/geolocate?key=${REACT_APP_GOOGLE_KEY}`)
-		.then(res => {
-			this.setState({
-				location: res.data.location
-			})
-		})
-		.catch(err => console.log(err))
-
+		axios.post(`https://www.googleapis.com/geolocation/v1/geolocate?key=${REACT_APP_GOOGLE_KEY}`).then(res => {
+			this.setState({location: res.data.location})
+		}).catch(err => console.log(err))
 	}
 
+	clickLocation = (location) => {
+		this.setState({location})
+	}
 
 	inputHandler = (e) => {
 		const {name, value} = e.target
-		this.setState({
-			[name]: value
-		})
-	}
-
-	geolocate = () => {
-		axios.post(`https://www.googleapis.com/geolocation/v1/geolocate?key=${REACT_APP_GOOGLE_KEY}`)
-		.then(res => {
-			this.setState({
-				location: res.data.location
-			})
-		})
-		.catch(err => console.log(err))
+		this.setState({[name]: value})
 	}
 
 	showMap = () => {
-		this.setState({
-			showMap: true
-		})
+		this.setState({showMap: true})
+	}
+	hideMap = () => {
+		this.setState({showMap: false})
+		this.componentDidMount()
 	}
 
 	render() {
@@ -58,7 +46,6 @@ export default class TourInfo extends Component {
 		return (
 			<div>
 				<h1>Create a Tour</h1>
-
 				<form>
 					<div className="inputs">
 						<h4>Tour Name:</h4>
@@ -105,7 +92,7 @@ export default class TourInfo extends Component {
 					<div className="inputs">
 						<h4>Starting Location</h4>
 						<div>
-							<input type="radio" name="location"/>
+							<input onClick={this.hideMap} type="radio" name="location"/>
 							<label>Use Current Location</label>
 						</div>
 
@@ -114,9 +101,7 @@ export default class TourInfo extends Component {
 							<label>Choose from map</label>
 						</div>
 					</div>
-					{this.state.showMap && <Map currentLocation={this.state.location} gKey={REACT_APP_GOOGLE_KEY} />}
-					
-					
+					{this.state.showMap && <Map clickLocation={this.clickLocation} currentLocation={this.state.location} gKey={REACT_APP_GOOGLE_KEY} />}			
 				</form>
 				
 			</div>

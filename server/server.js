@@ -6,6 +6,7 @@ const session = require('express-session')
 
 const GoogleCtrl = require('./controllers/GoogleCtrl')
 const authCtrl = require('./controllers/auth')
+// const authMiddleware = require('./middleware/authMiddleware')
 
 const {SERVER_PORT, CONNECTION_STRING, SESSION_SECRET} = process.env
 
@@ -25,4 +26,8 @@ massive(CONNECTION_STRING).then(db => {
 })
 
 app.post('/auth/register', authCtrl.register)
+app.post('/auth/login', authCtrl.login)
+app.get('/auth/logout', authCtrl.logout)
+
+
 
