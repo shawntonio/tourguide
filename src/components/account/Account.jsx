@@ -1,41 +1,28 @@
-import React, {Component} from 'react'
-import {Switch, Route} from 'react-router-dom'
-import {connect} from 'react-redux'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 
-import LoginForm from './LoginForm'
-import RegisterForm from './RegisterForm'
+import LoginForm from './LoginRegisterForm'
 import Profile from './Profile'
 
 class Account extends Component {
 
 	render() {
-		console.log(this.props.username)
 		return (
 			<div>
 				<header>
-					Account
+					<h3>Account</h3>
 				</header>
 				{
 					this.props.username ? <Profile />
-					: (
-						<div>
-							<button>Login</button>
-							<button>Register</button>
-						</div>
-					)
+						:	<LoginForm />
 				}
-
-				<Switch>
-					<Route path="/account/login" component={LoginForm} />
-					<Route path="/account/register" component={RegisterForm} />
-				</Switch>
 			</div>
 		)
 	}
 }
 
 const mapStateToProps = state => {
-	const {username} = state
+	const { username } = state
 	return { username }
 }
 
