@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 import { updateUser } from '../../store';
+import Tour from '../tours/Tour';
 
 class MyTours extends Component {
 	state = {
@@ -28,7 +29,7 @@ class MyTours extends Component {
 
 	render() {
 		const tours = this.state.tours.map(tour => (
-			<h4>{tour.name}</h4>
+			<Tour key={tour.id} tour={tour} />
 		))
 		
 		return (

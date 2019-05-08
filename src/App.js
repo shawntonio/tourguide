@@ -21,7 +21,7 @@ function App() {
           <Route path = '/account' component={Account} />
           <Route path = '/my-tours' component={MyTours} />
           <Route path='/tour-info' component={TourInfo} />
-          <Route path='/content' component={Content} />
+          <Route path='/content/:id' component={Content} />
           <Route path='/preview' component={Preview} />
         </Switch>
       </HashRouter>

@@ -36,7 +36,7 @@ class chooseMap extends Component {
     return (
       <div>
         <div className="inputs">
-          <label>Starting Location</label>
+          <label>Choose Location</label>
           <div>
             <input onClick={this.hideMap} type="radio" name="location" />
             <label>Use Current Location</label>
