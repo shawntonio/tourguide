@@ -24,7 +24,6 @@ class LoginRegisterForm extends Component {
 		Axios.post('/auth/login', {username, password})
 		.then(res => {
 			this.props.updateUser(res.data.login_id, username)
-			// this.props.history.push('/account')
 		}).catch(err => console.log(err))
 	}
 

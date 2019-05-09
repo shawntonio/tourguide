@@ -6,6 +6,9 @@ import {withRouter} from 'react-router-dom';
 import {clearUser} from '../../store'
 
 class Profile extends Component {
+	componentDidMount(){
+		this.props.previousPageReturn()
+	}
 
 	logout = () => {
 		Axios.get('/auth/logout').then(() => {

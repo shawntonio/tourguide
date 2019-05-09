@@ -4,28 +4,20 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Map from '../maps/ChooseMap';
-import { updateUser } from '../../store';
 
 class TourInfo extends Component {
 	state = {
 		name: '',
 		location: {},
-		costs: null,
-		price: null,
+		costs: 0,
+		price: 0,
 		type: '',
 		time: '',
 		difficulty: '',
 	}
 
 	componentDidMount() {
-		axios.get('/auth/user').then(res => {
-			const { login_id, username } = res.data
-			if (!login_id) {
-				this.props.history.push('/account')
-			} else {
-				this.props.updateUser(login_id, username)
-			}
-		})
+		!this.props.username && this.props.history.replace(`/account?${this.props.history.location.pathname}`)
 	}
 
 	clickLocation = (location) => {
@@ -101,8 +93,10 @@ class TourInfo extends Component {
 		)
 	}
 }
-const mapDispatchToProps = {
-	updateUser
+
+const mapStateToProps = state => {
+	const {username} = state
+	return {username}
 }
 
-export default connect(null, mapDispatchToProps)(withRouter(TourInfo))
+export default connect(mapStateToProps)(withRouter(TourInfo))

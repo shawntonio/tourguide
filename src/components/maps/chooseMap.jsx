@@ -6,7 +6,7 @@ const {REACT_APP_GOOGLE_KEY} = process.env;
 
 const AnyReactComponent = ({ text }) => <div>{text}</div>;
 
-class chooseMap extends Component {
+class ChooseMap extends Component {
   state = {
     location: this.props.currentLocation,
     showMap: false
@@ -70,4 +70,4 @@ class chooseMap extends Component {
   }
 }
 
-export default chooseMap;
+export default ChooseMap;

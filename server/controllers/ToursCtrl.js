@@ -11,10 +11,22 @@ module.exports = {
 	},
 
 	getMyTours(req, res) {
+		if (!req.session.user) {
+			return res.sendStatus(500)
+		}
 		const {login_id: user_id} = req.session.user
 		const db = req.app.get('db')
 		db.getMyTours({user_id}).then(tours => {
 			res.status(200).send(tours)
 		}).catch(err => res.status(500).send(err))
+	},
+
+	getTourById(req, res) {
+		const db = req.app.get('db')
+		const id = +req.params.id
+
+		db.getTourById({id}).then(tour => {
+			res.status(200).send(tour[0])
+		})
 	}
 }

@@ -11,7 +11,7 @@ module.exports = {
 
 	readContent(req, res) {
 		const db = req.app.get('db')
-		const {id} = req.params
+		const id = +req.params.id
 
 		db.getContent({id}).then(content => {
 			res.status(200).send(content)

@@ -33,6 +33,7 @@ app.get('/auth/logout', authCtrl.logout)
 
 app.post('/api/tours', toursCtrl.createTour)
 app.get('/api/tours/user', toursCtrl.getMyTours)
+app.get('/api/tour/:id', toursCtrl.getTourById)
 
 app.get('/api/sig', AwsCtrl.getSig)
 

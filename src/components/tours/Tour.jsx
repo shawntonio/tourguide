@@ -14,7 +14,6 @@ export default class Tour extends Component {
 
 	render() {
 		const {id, name, costs, type, duration, price, difficulty} = this.props.tour
-		console.log(id)
 		return (
 			<div>
 				<h3>{name}</h3>
@@ -27,6 +26,10 @@ export default class Tour extends Component {
 				<Link to={`/content/${id}`} >
 					<button>Add Point of Interest</button>
 				</Link>
+				<Link to={`/preview/${id}`} >
+					<button>Preview</button>
+				</Link>
+
 			</div>
 		)
 	}
