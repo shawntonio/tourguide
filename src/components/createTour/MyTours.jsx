@@ -19,12 +19,15 @@ class MyTours extends Component {
 			} else {
 				this.props.updateUser(login_id, username)
 			}
-		})
-		axios.get('/api/tours/user').then(res => {
-			this.setState({
-				tours: res.data
-			})
-		})
+		}).catch(err => console.log(err))
+
+		if (this.props.login_id) {
+			axios.get(`/api/tours/${this.props.login_id}`).then(res => {
+				this.setState({
+					tours: res.data
+				})
+			}).catch(err => console.log(err))
+		}
 	}
 
 	render() {
@@ -42,8 +45,13 @@ class MyTours extends Component {
 	}
 }
 
+const mapStateToProps = state => {
+	const {login_id} = state
+	return {login_id}
+}
+
 const mapDispatchToProps = {
 	updateUser
 }
 
-export default connect(null, mapDispatchToProps)(withRouter(MyTours))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MyTours))

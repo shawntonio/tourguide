@@ -9,10 +9,10 @@ export const SET_USER = 'SET_USER'
 export const GET_USER = 'GET_USER'
 export const CLEAR_USER = 'CLEAR_USER'
 
-export function updateUser(id, username) {
+export function updateUser(login_id, username) {
 	return {
 		type: SET_USER,
-		payload: {id, username}
+		payload: {login_id, username}
 	}
 }
 
@@ -34,4 +34,4 @@ const userReducer = (state = initialState, action) => {
 	}
 }
 
-export default createStore(userReducer);
+export default createStore(userReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());

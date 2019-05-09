@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import ChooseMap from '../../maps/ChooseMap';
-import Axios from 'axios';
-import {v4 as randomString} from 'uuid';
 import {Link} from 'react-router-dom';
 
 export default class Recorder extends Component {
@@ -62,38 +60,6 @@ export default class Recorder extends Component {
 		console.log(this.state.mediaRecorder.state)
 	}
 
-	getSig = () => {
-		const filename = `tour${this.props.id}content${randomString()}`
-
-		Axios.get('/api/sig', {
-			params: {
-				filename,
-				filetype: this.state.blob.type
-			}
-		}).then(res => {
-			const {signedRequest, url} = res.data
-			this.uploadBlob(this.state.blob, signedRequest, url)
-		}).catch(err => console.log(err))
-	}
-
-	uploadBlob = (blob, signedRequest, url) => {
-		const options = {
-      headers: {
-        'Content-Type': blob.type,
-      },
-		}
-		Axios.put(signedRequest, blob, options)
-		.then(() => {
-			console.log(url, this.props.id)
-			const {id: tour_id} = this.props
-			const {location} = this.state
-			Axios.post('/api/content', {url, tour_id, location})
-			.then()
-			.catch(err => console.log(err))
-		})
-		.catch(err => console.log(err))
-	}
-
 	clickLocation = (location) => {
 		this.setState({ location })
 	}
@@ -108,7 +74,7 @@ export default class Recorder extends Component {
 				{this.state.blob && <audio ref={this.audioRef} controls ></audio> }
 				<ChooseMap clickLocation={this.clickLocation} currentLocation={this.state.location} />
 				<Link to='/my-tours'>
-					<button onClick={this.getSig}>Add Point of Interest</button>
+					<button onClick={() => this.props.getSig(this.state.blob, this.state.location)}>Add Point of Interest</button>
 				</Link>
 			</div>
 		)

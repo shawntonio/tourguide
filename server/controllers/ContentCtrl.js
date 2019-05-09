@@ -3,10 +3,12 @@ const AwsCtrl = require('./AwsCtrl')
 module.exports = {
 	createContent(req, res) {
 		const db = req.app.get('db')
-		const {url, tour_id} = req.body
+		const {url, tour_id, order_pos, object_key} = req.body
 		const {lat, lng} = req.body.location
 
-		db.addContent({url, tour_id, lat, lng})
+		console.log(order_pos, object_key)
+
+		db.addContent({url, tour_id, lat, lng, order_pos, object_key})
 		.then(() => res.sendStatus(200))
 		.catch(err => res.send(err))
 	},

@@ -23,7 +23,7 @@ export default class Tour extends Component {
 				<p>{price}</p>
 				<p>{difficulty}</p>
 				<p>{this.state.content.length} Points of interest</p>
-				<Link to={`/content/${id}`} >
+				<Link to={`/content/${id}/${this.state.content.length}`} >
 					<button>Add Point of Interest</button>
 				</Link>
 				<Link to={`/preview/${id}`} >

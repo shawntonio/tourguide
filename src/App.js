@@ -30,7 +30,7 @@ class App extends Component {
             <Route path='/account' component={Account} />
             <Route path='/my-tours' component={MyTours} />
             <Route path='/tour-info' component={TourInfo} />
-            <Route path='/content/:id' component={Content} />
+            <Route path='/content/:id/:count' component={Content} />
             <Route path='/preview/:id' component={Preview} />
           </Switch>
         </HashRouter>
