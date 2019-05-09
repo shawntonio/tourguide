@@ -9,7 +9,7 @@ export default class Content extends Component {
 		const {id} = this.props.match.params
 		return (
 			<div>
-				<Recorder />
+				<Recorder id={id} />
 			</div>
 		)
 	}

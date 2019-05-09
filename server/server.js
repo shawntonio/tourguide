@@ -7,7 +7,7 @@ const session = require('express-session')
 const GoogleCtrl = require('./controllers/GoogleCtrl')
 const authCtrl = require('./controllers/auth')
 const toursCtrl = require('./controllers/ToursCtrl')
-// const authMiddleware = require('./middleware/authMiddleware')
+const AwsCtrl = require('./controllers/AwsCtrl')
 
 const {SERVER_PORT, CONNECTION_STRING, SESSION_SECRET} = process.env
 
@@ -33,3 +33,5 @@ app.get('/auth/logout', authCtrl.logout)
 
 app.post('/api/tours', toursCtrl.createTour)
 app.get('/api/tours/user', toursCtrl.getMyTours)
+
+app.get('/api/sig', AwsCtrl.getSig)

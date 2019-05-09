@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import ChooseMap from '../../maps/ChooseMap';
+import Axios from 'axios';
+import {v4 as randomString} from 'uuid';
 
 export default class Recorder extends Component {
 	constructor(props) {
@@ -25,17 +27,15 @@ export default class Recorder extends Component {
 			navigator.mediaDevices.getUserMedia({audio: true})
 			.then(stream => {
 				const mediaRecorder = new MediaRecorder(stream)
-				console.log(mediaRecorder)
 				this.setState({
 					mediaRecorder
 				})
 				//listeners
 				mediaRecorder.ondataavailable = e => {
 					this.state.chunks.push(e.data)
-					console.log(e.data)
 				}
 				mediaRecorder.onstop = e => {
-					const {chunks, blob} = this.state
+					const {chunks} = this.state
 					this.setState({
 						blob: new Blob(chunks, { 'type' : chunks[0].type}),
 						chunks: []
@@ -51,7 +51,7 @@ export default class Recorder extends Component {
 	}
 
 	startRecording = () => {
-		const {chunks, mediaRecorder} = this.state
+		const {mediaRecorder} = this.state
 		mediaRecorder.start()
 		console.log(mediaRecorder.state)
 	}
@@ -61,21 +61,47 @@ export default class Recorder extends Component {
 		console.log(this.state.mediaRecorder.state)
 	}
 
+	getSig = () => {
+		const filename = `tour${this.props.id}content${randomString()}`
+
+		Axios.get('/api/sig', {
+			params: {
+				filename,
+				filetype: this.state.blob.type
+			}
+		}).then(res => {
+			const {signedRequest, url} = res.data
+			this.uploadBlob(this.state.blob, signedRequest, url)
+		}).catch(err => console.log(err))
+	}
+
+	uploadBlob = (blob, signedRequest, url) => {
+		const options = {
+      headers: {
+        'Content-Type': blob.type,
+      },
+		}
+		Axios.put(signedRequest, blob, options)
+		.then(res => {
+			console.log(url, this.props.id)
+		})
+		.catch(err => console.log(err))
+	}
+
 	clickLocation = (location) => {
 		this.setState({ location })
 	}
 
 	render() {
-		console.log(this.audioRef.current)
 		return(
 			<div>
-				<audio ref={this.audioRef} controls ></audio>
 				<div className="recordButtons">
 					<button onClick={this.startRecording}>record</button>
 					<button onClick={this.stopRecording}>stop</button>
 				</div>
+				{this.state.blob && <audio ref={this.audioRef} controls ></audio> }
 				<ChooseMap clickLocation={this.clickLocation} currentLocation={this.state.location} />
-				<button>Add Point of Interest</button>
+				<button onClick={this.getSig}>Add Point of Interest</button>
 			</div>
 		)
 	}

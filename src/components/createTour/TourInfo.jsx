@@ -3,7 +3,7 @@ import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import Map from '../maps/chooseMap';
+import Map from '../maps/ChooseMap';
 import { updateUser } from '../../store';
 
 class TourInfo extends Component {
