@@ -21,32 +21,47 @@ class ContentMap extends Component {
 		})
 	}
 
+	deleteContent = (id) => {
+		axios.delete(`/api/content/${id}`)
+		.then(() => this.componentDidMount())
+	}
+
 	render() {
 		const { lat, lng } = this.state.tour
 
 		const contentMarker = this.state.content.map(marker => {
-			const {lat, lng} = marker
+			const { lat, lng } = marker
 			return (
-				<Marker
-					position={{lat, lng}}
-				/>
-			)
-		})
-		return (
-			<Map
-				google={this.props.google}
-				zoom={17}
-				style={{ height: '100%', width: '100%' }}
-				center={{ lat, lng }}
-			>
-
 				<Marker
 					position={{ lat, lng }}
 				/>
+			)
+		})
+		const contentList = this.state.content.map(item => {
 
-				{contentMarker}
+			return (
+				<li>{item.id} <button onClick={() => this.deleteContent(item.id)}>delete</button></li>
+			)
+		})
+		return (
+			<>
+				<ol>{contentList}</ol>
+				<Map
+					google={this.props.google}
+					zoom={17}
+					style={{ height: '100%', width: '100%' }}
+					center={{ lat, lng }}
+					disableDefaultUI={true}
+				>
 
-			</Map>
+					<Marker
+						position={{ lat, lng }}
+					/>
+
+					{contentMarker}
+
+				</Map>
+			</>
 		)
 	}
 }

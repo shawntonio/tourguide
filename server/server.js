@@ -39,3 +39,4 @@ app.get('/api/sig', AwsCtrl.getSig)
 
 app.post('/api/content', ContentCtrl.createContent)
 app.get('/api/content/:id', ContentCtrl.readContent)
+app.delete('/api/content/:id', ContentCtrl.deleteContent)

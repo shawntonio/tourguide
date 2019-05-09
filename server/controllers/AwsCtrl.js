@@ -33,5 +33,10 @@ module.exports = {
 
 			res.send(returnData)
 		})
+
+	},
+	
+	deleteObject(req, res) {
+
 	}
 }

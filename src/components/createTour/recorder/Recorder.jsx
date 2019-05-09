@@ -88,7 +88,7 @@ export default class Recorder extends Component {
 			const {id: tour_id} = this.props
 			const {location} = this.state
 			Axios.post('/api/content', {url, tour_id, location})
-			.then(() => delete this.state.mediaRecorder)
+			.then()
 			.catch(err => console.log(err))
 		})
 		.catch(err => console.log(err))
