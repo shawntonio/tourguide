@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ChooseMap from '../../maps/ChooseMap';
 import Axios from 'axios';
 import {v4 as randomString} from 'uuid';
+import {Link} from 'react-router-dom';
 
 export default class Recorder extends Component {
 	constructor(props) {
@@ -87,7 +88,8 @@ export default class Recorder extends Component {
 			const {id: tour_id} = this.props
 			const {location} = this.state
 			Axios.post('/api/content', {url, tour_id, location})
-			.then(() => console.log('ok')).catch(err => console.log(err))
+			.then()
+			.catch(err => console.log(err))
 		})
 		.catch(err => console.log(err))
 	}
@@ -105,7 +107,9 @@ export default class Recorder extends Component {
 				</div>
 				{this.state.blob && <audio ref={this.audioRef} controls ></audio> }
 				<ChooseMap clickLocation={this.clickLocation} currentLocation={this.state.location} />
-				<button onClick={this.getSig}>Add Point of Interest</button>
+				<Link to='/my-tours'>
+					<button onClick={this.getSig}>Add Point of Interest</button>
+				</Link>
 			</div>
 		)
 	}

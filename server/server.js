@@ -37,3 +37,4 @@ app.get('/api/tours/user', toursCtrl.getMyTours)
 app.get('/api/sig', AwsCtrl.getSig)
 
 app.post('/api/content', ContentCtrl.createContent)
+app.get('/api/content/:id', ContentCtrl.readContent)
