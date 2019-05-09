@@ -82,8 +82,12 @@ export default class Recorder extends Component {
       },
 		}
 		Axios.put(signedRequest, blob, options)
-		.then(res => {
+		.then(() => {
 			console.log(url, this.props.id)
+			const {id: tour_id} = this.props
+			const {location} = this.state
+			Axios.post('/api/content', {url, tour_id, location})
+			.then(() => console.log('ok')).catch(err => console.log(err))
 		})
 		.catch(err => console.log(err))
 	}

@@ -10,4 +10,12 @@ create table tour (
     lat float,
     lng float,
     live boolean
-)
+);
+
+create table content (
+    id serial primary key,
+    tour_id int references tour,
+    url text,
+    lat float,
+    lng float
+);

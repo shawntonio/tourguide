@@ -4,7 +4,8 @@ import {Link} from 'react-router-dom';
 export default class Tour extends Component {
 
 	render() {
-		const {user_id, name, costs, type, duration, price, difficulty} = this.props.tour
+		const {id, name, costs, type, duration, price, difficulty} = this.props.tour
+		console.log(id)
 		return (
 			<div>
 				<h3>{name}</h3>
@@ -13,7 +14,7 @@ export default class Tour extends Component {
 				<p>{costs}</p>
 				<p>{price}</p>
 				<p>{difficulty}</p>
-				<Link to={`/content/${user_id}`} >
+				<Link to={`/content/${id}`} >
 					<button>Add Content</button>
 				</Link>
 			</div>
