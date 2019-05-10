@@ -1,2 +1,3 @@
 delete from content
-where id = ${id};
+where id = ${id}
+returning *;

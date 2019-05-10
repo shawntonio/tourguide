@@ -7,23 +7,13 @@ import {v4 as randomString} from 'uuid';
 
 class Content extends Component {
 
-	state = {
-		object_key: '',
-		order_pos: null
-	}
-
 	componentDidMount() {
 		!this.props.username && this.props.history.replace(`/account?${this.props.history.location.pathname}`)
 	}
 
 	getSig = (blob, location) => {
 		const filename = `tour${this.props.match.params.id}content${randomString()}`
-
-		this.setState({
-			order_pos: this.props.match.params.count,
-			object_key: filename
-		})
-
+		
 		Axios.get('/api/sig', {
 			params: {
 				filename,
@@ -31,11 +21,11 @@ class Content extends Component {
 			}
 		}).then(res => {
 			const {signedRequest, url} = res.data
-			this.uploadBlob(blob, signedRequest, url, location)
+			this.uploadBlob(blob, signedRequest, url, location, filename)
 		}).catch(err => console.log(err))
 	}
 
-	uploadBlob = (blob, signedRequest, url, location) => {
+	uploadBlob = (blob, signedRequest, url, location, object_key) => {
 		const options = {
       headers: {
         'Content-Type': blob.type,
@@ -43,8 +33,7 @@ class Content extends Component {
 		}
 		Axios.put(signedRequest, blob, options)
 		.then(() => {
-			const {id: tour_id} = this.props.match.params
-			const {order_pos, object_key} = this.state
+			const {id: tour_id, count: order_pos} = this.props.match.params
 			Axios.post('/api/content', {url, tour_id, location, order_pos, object_key})
 			.then()
 			.catch(err => console.log(err))

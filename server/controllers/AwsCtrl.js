@@ -36,7 +36,23 @@ module.exports = {
 
 	},
 	
-	deleteObject(req, res) {
+	async deleteObject(req, res) {
+		const db = req.app.get('db')
+		const id = +req.params.id
+		const s3 = new AWS.S3()
 
+		const deletedContent = await db.deleteContent({id})
+
+		const params = {
+			Bucket: S3_BUCKET,
+			Key: deletedContent[0].object_key
+		}
+
+		s3.deleteObject(params, (err, data) => {
+			if (err) console.log(err)
+			else {
+				res.sendStatus(200)
+			}
+		})
 	}
 }
