@@ -11,8 +11,8 @@ class MyTours extends Component {
 		tours: []
 	}
 	
-	componentDidMount() {
-		axios.get('/auth/user').then(res => {
+	async componentDidMount() {
+		await axios.get('/auth/user').then(res => {
 			const { login_id, username } = res.data
 			if (!login_id) {
 				this.props.history.push('/account')

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import ChooseMap from '../../maps/ChooseMap';
-import {Link} from 'react-router-dom';
 
 export default class Recorder extends Component {
 	constructor(props) {
@@ -73,9 +72,8 @@ export default class Recorder extends Component {
 				</div>
 				{this.state.blob && <audio ref={this.audioRef} controls ></audio> }
 				<ChooseMap clickLocation={this.clickLocation} currentLocation={this.state.location} />
-				<Link to='/my-tours'>
-					<button onClick={() => this.props.getSig(this.state.blob, this.state.location)}>Add Point of Interest</button>
-				</Link>
+				<button onClick={() => this.props.getSig(this.state.blob, this.state.location)}>Add Point of Interest</button>
+				
 			</div>
 		)
 	}

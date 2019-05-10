@@ -33,9 +33,10 @@ class Content extends Component {
 		}
 		Axios.put(signedRequest, blob, options)
 		.then(() => {
-			const {id: tour_id, count: order_pos} = this.props.match.params
+			const {id: tour_id, count} = this.props.match.params
+			const order_pos = +count + 1
 			Axios.post('/api/content', {url, tour_id, location, order_pos, object_key})
-			.then()
+			.then(() => this.props.history.push('/my-tours'))
 			.catch(err => console.log(err))
 		})
 		.catch(err => console.log(err))

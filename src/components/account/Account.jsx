@@ -14,7 +14,6 @@ class Account extends Component {
 	}
 
 	render() {
-		console.log(this.props.history.location.search)
 		return (
 			<div>
 				<header>
