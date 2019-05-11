@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Marker, Map, InfoWindow, GoogleApiWrapper } from 'google-maps-react';
+import { Marker, Map, InfoWindow, GoogleApiWrapper, Polyline } from 'google-maps-react';
 import axios from 'axios';
 // import {FaMapMarkerAlt} from 'react-icons/fa';
 
@@ -15,7 +15,8 @@ class ContentMap extends Component {
 			content: [],
 			activeMarker: {},
 			showInfoWindow: false,
-			directionsDisplay: null
+			directionsDisplay: null,
+			polyline: null
 		}
 	}
 
@@ -30,35 +31,39 @@ class ContentMap extends Component {
 		})
 
 		if (this.state.content[0]) {
-			// axios.post(`/api/route`, {content: this.state.content})
-			// .then(res => {
-				
-
-			// })
 			
 			const directionsService = await new this.props.google.maps.DirectionsService()
-			const directionsDisplay = await new this.props.google.maps.DirectionsRenderer()
+			// const directionsDisplay = await new this.props.google.maps.DirectionsRenderer()
 
-			directionsDisplay.setMap(this.mapRef.current.map)
+			// directionsDisplay.setMap(this.mapRef.current.map)
 			console.log(this.mapRef.current.map)
 
 			const {lat, lng} = this.state.tour
 			const {lat: latd, lng: lngd} = this.state.content[this.state.content.length - 1]
 			const origin = await new this.props.google.maps.LatLng(lat, lng)
 			const destination = await new this.props.google.maps.LatLng(latd, lngd)
-			console.log(origin.lat())
+			
+			const wayPoints = this.state.content.slice(0, this.state.content.length - 1).map(content => {
+				const {lat, lng} = content
+				const location = new this.props.google.maps.LatLng(lat, lng)
+				return {location}
+			})
+			
 			const request = {
 				origin,
 				destination,
-				travelMode: 'DRIVING'
+				travelMode: 'WALKING',
+				waypoints: wayPoints,
+				optimizeWaypoints: true
 			}
 
 			directionsService.route(request, (result, status) => {
 				console.log(status)
 				if (status == 'OK') {
-					console.log(directionsDisplay)
+					// console.log(directionsDisplay)
 					console.log(result)
-					directionsDisplay.setDirections(result)
+					// directionsDisplay.setDirections(result)
+					this.setState({polyline: result.routes[0].overview_path})
 				}
 			})
 		}
@@ -120,10 +125,7 @@ class ContentMap extends Component {
 						position={{ lat, lng }}
 					/>
 
-					<Marker 
-						visible={this.state.showInputMarker}
-						postion={this.state.inputMarkerPos}
-					/>
+				
 
 					{contentMarker}
 
@@ -133,6 +135,12 @@ class ContentMap extends Component {
 					>
 						<audio controls src={this.state.activeMarker.name}></audio>
 					</InfoWindow>
+
+					<Polyline
+          path={this.state.polyline}
+          strokeColor="#0000FF"
+          strokeOpacity={0.8}
+          strokeWeight={2} />
 
 				</Map>
 			</>
