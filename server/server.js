@@ -34,6 +34,7 @@ app.get('/auth/logout', authCtrl.logout)
 
 app.post('/api/tours', toursCtrl.createTour)
 app.get('/api/tours/:id', toursCtrl.getMyTours)
+app.get('/api/tours', toursCtrl.getLiveLocalTours)
 app.get('/api/tour/:id', toursCtrl.getTourById)
 app.put('/api/tour/:id', toursCtrl.updateTour)
 

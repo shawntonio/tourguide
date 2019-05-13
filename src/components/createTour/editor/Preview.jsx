@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import {withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 
 import ContentMap from '../../maps/ContentMap'
 import EditorHeader from './EditorHeader'
 
-export default class Preview extends Component {
+class Preview extends Component {
 
 	state = {
 		tour: {},
@@ -23,6 +25,7 @@ export default class Preview extends Component {
 		axios.get(`/api/content/${id}`).then(res => {
 			this.setState({ content: res.data })
 		})
+
 	}
 
 	setMarker = (marker, bool) => {
@@ -43,6 +46,7 @@ export default class Preview extends Component {
 		const { id } = this.props.match.params
 		return (
 			<div style={{ height: '100vh', width: '100vw' }}>
+
 				<header style={{marginBottom: '5px'}}>
 					logo
 					{this.state.showInfoWindow && <EditorHeader activeMarker={this.state.activeMarker} deleteContent={this.deleteContent} />}
@@ -55,3 +59,10 @@ export default class Preview extends Component {
 		)
 	}
 }
+
+const mapStateToProps = state => {
+	const {login_id} = state
+	return {login_id}
+}
+
+export default connect(mapStateToProps)(withRouter(Preview))

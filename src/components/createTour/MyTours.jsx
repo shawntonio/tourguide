@@ -15,7 +15,7 @@ class MyTours extends Component {
 		await axios.get('/auth/user').then(res => {
 			const { login_id, username } = res.data
 			if (!login_id) {
-				this.props.history.push('/account')
+				this.props.history.push(`/account?${this.props.history.location}`)
 			} else {
 				this.props.updateUser(login_id, username)
 			}

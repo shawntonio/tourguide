@@ -6,7 +6,9 @@ import Axios from 'axios';
 import {updateUser} from './store';
 
 import Tours from './components/tours/Tours';
+
 import Account from './components/account/Account';
+
 import MyTours from './components/createTour/MyTours';
 import TourInfo from './components/createTour/TourInfo';
 import Content from './components/createTour/Content';

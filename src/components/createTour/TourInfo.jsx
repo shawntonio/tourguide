@@ -38,7 +38,7 @@ class TourInfo extends Component {
 	}
 
 	render() {
-		const { name, costs, price, type, time, difficulty } = this.state
+		const { name } = this.state
 		return (
 			<div>
 				<h1>Create a Tour</h1>

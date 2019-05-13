@@ -36,5 +36,18 @@ module.exports = {
 		db.updateTour({type, duration, costs, price, difficulty, id})
 		.then(() => res.sendStatus(200))
 		.catch(err => console.log(err))
+	},
+
+	getLiveLocalTours(req, res) {
+		const db = req.app.get('db')
+		const {lat, lng} = req.query
+		const latN = +lat - 1
+		const latP = +lat + 1
+		const lngN = +lng - 1
+		const lngP = +lng + 1
+		
+		db.getLiveLocalTours({latN, latP, lngN, lngP}).then(tours => {
+			res.status(200).send(tours)
+		}).catch(err => console.log(err))
 	}
 }
