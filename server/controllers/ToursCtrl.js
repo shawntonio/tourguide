@@ -49,5 +49,14 @@ module.exports = {
 		db.getLiveLocalTours({latN, latP, lngN, lngP}).then(tours => {
 			res.status(200).send(tours)
 		}).catch(err => console.log(err))
+	},
+
+	deleteTour(req, res) {
+		const db = req.app.get('db')
+		const {id} = req.params
+
+		db.deleteTour({id})
+		.then(() => res.sendStatus(200))
+		.catch(err => console.log(err))
 	}
 }

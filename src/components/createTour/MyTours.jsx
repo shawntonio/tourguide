@@ -22,17 +22,26 @@ class MyTours extends Component {
 		}).catch(err => console.log(err))
 
 		if (this.props.login_id) {
-			axios.get(`/api/tours/${this.props.login_id}`).then(res => {
-				this.setState({
-					tours: res.data
-				})
-			}).catch(err => console.log(err))
+			this.getTours()
 		}
+	}
+
+	getTours = () => {
+		axios.get(`/api/tours/${this.props.login_id}`).then(res => {
+			this.setState({
+				tours: res.data
+			})
+		}).catch(err => console.log(err))
+	}
+
+	deleteTour = (id) => {
+		axios.delete(`/api/tour/${id}`)
+		.then(() => this.getTours())
 	}
 
 	render() {
 		const tours = this.state.tours.map(tour => (
-			<Tour key={tour.id} tour={tour} />
+			<Tour key={tour.id} tour={tour} deleteTour={this.deleteTour} />
 		))
 		
 		return (

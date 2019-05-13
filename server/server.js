@@ -37,6 +37,7 @@ app.get('/api/tours/:id', toursCtrl.getMyTours)
 app.get('/api/tours', toursCtrl.getLiveLocalTours)
 app.get('/api/tour/:id', toursCtrl.getTourById)
 app.put('/api/tour/:id', toursCtrl.updateTour)
+app.delete('/api/tour/:id', toursCtrl.deleteTour)
 
 app.get('/api/sig', AwsCtrl.getSig)
 

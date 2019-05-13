@@ -12,6 +12,14 @@ export default class Tour extends Component {
 			.then(res => this.setState({ content: res.data }))
 	}
 
+	deleteTour = (id) => {
+		this.state.content.forEach(content => {
+			Axios.delete(`/api/content/${content.id}`)
+			.catch(err => console.log(err))
+		})
+		this.props.deleteTour(id)
+	}
+
 	render() {
 		const { id, name, costs, type, duration, price, difficulty, live } = this.props.tour
 		return (
@@ -46,7 +54,8 @@ export default class Tour extends Component {
 				</div>
 				}
 
-				<button>Delete</button>
+				{this.props.deleteTour && <button onClick={() => this.deleteTour(id)}>Delete</button>}
+				
 
 			</div>
 		)
