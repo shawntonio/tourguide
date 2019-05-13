@@ -9,11 +9,11 @@ class TourInfo extends Component {
 	state = {
 		name: '',
 		location: {},
-		costs: 0,
-		price: 0,
-		type: '',
-		time: '',
-		difficulty: '',
+		// costs: 0,
+		// price: 0,
+		// type: '',
+		// time: '',
+		// difficulty: '',
 	}
 
 	componentDidMount() {
@@ -48,7 +48,7 @@ class TourInfo extends Component {
 						<input name='name' value={name} type="text" onChange={this.inputHandler} />
 					</div>
 
-					<div className="inputs">
+					{/* <div className="inputs">
 						<label>Type of Tour</label>
 						<select name="type" value={type} onChange={this.inputHandler} >
 							<option value="choose">choose</option>
@@ -83,7 +83,7 @@ class TourInfo extends Component {
 							<option value="normal">Normal</option>
 							<option value="hard">Hard</option>
 						</select>
-					</div>
+					</div> */}
 					<Map clickLocation={this.clickLocation} currentLocation={this.state.location} />
 
 					<button>Create Tour</button>

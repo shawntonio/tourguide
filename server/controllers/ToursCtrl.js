@@ -1,11 +1,11 @@
 module.exports = {
 	createTour(req, res) {
 		const db = req.app.get('db')
-		const {name, costs, price, type, time: duration, difficulty} = req.body
-		const {lat, lng} = req.body.location
+		const {name, location} = req.body
+		const {lat, lng} = location
 		const {login_id: user_id} = req.session.user
 
-		db.createTour({user_id, name, costs, price, type, duration, difficulty, lat, lng})
+		db.createTour({user_id, name, lat, lng})
 		.then(() => res.sendStatus(200))
 		.catch(err => res.status(500).send(err))
 	},

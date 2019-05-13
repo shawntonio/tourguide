@@ -10,7 +10,7 @@ import Account from './components/account/Account';
 import MyTours from './components/createTour/MyTours';
 import TourInfo from './components/createTour/TourInfo';
 import Content from './components/createTour/Content';
-import Preview from './components/createTour/Preview';
+import Preview from './components/createTour/editor/Preview';
 
 class App extends Component {
   componentDidMount() {

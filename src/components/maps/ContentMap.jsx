@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import { Marker, Map, InfoWindow, GoogleApiWrapper, Polyline } from 'google-maps-react';
-import axios from 'axios';
-// import {FaMapMarkerAlt} from 'react-icons/fa';
-
 
 class ContentMap extends Component {
 	constructor(props) {
@@ -11,139 +8,105 @@ class ContentMap extends Component {
 		this.mapRef = React.createRef()
 
 		this.state = {
-			tour: {},
-			content: [],
-			activeMarker: {},
-			showInfoWindow: false,
 			directionsDisplay: null,
 			polyline: null
 		}
 	}
 
 	async componentDidMount() {
-		const { id } = this.props
-		axios.get(`/api/tour/${id}`).then(res => {
-			this.setState({ tour: res.data })
-		}).catch(err => console.log(err))
+		const directionsService = await new this.props.google.maps.DirectionsService()
 
-		await axios.get(`/api/content/${id}`).then(res => {
-			this.setState({ content: res.data })
+		console.log(this.mapRef.current.map)
+
+		const { lat, lng } = this.props.tour
+		const { lat: latd, lng: lngd } = this.props.content[this.props.content.length - 1]
+		const origin = await new this.props.google.maps.LatLng(lat, lng)
+		const destination = await new this.props.google.maps.LatLng(latd, lngd)
+
+		const wayPoints = this.props.content.slice(0, this.props.content.length - 1).map(content => {
+			const { lat, lng } = content
+			const location = new this.props.google.maps.LatLng(lat, lng)
+			return { location }
 		})
 
-		if (this.state.content[0]) {
-			
-			const directionsService = await new this.props.google.maps.DirectionsService()
-			// const directionsDisplay = await new this.props.google.maps.DirectionsRenderer()
-
-			// directionsDisplay.setMap(this.mapRef.current.map)
-			console.log(this.mapRef.current.map)
-
-			const {lat, lng} = this.state.tour
-			const {lat: latd, lng: lngd} = this.state.content[this.state.content.length - 1]
-			const origin = await new this.props.google.maps.LatLng(lat, lng)
-			const destination = await new this.props.google.maps.LatLng(latd, lngd)
-			
-			const wayPoints = this.state.content.slice(0, this.state.content.length - 1).map(content => {
-				const {lat, lng} = content
-				const location = new this.props.google.maps.LatLng(lat, lng)
-				return {location}
-			})
-			
-			const request = {
-				origin,
-				destination,
-				travelMode: 'WALKING',
-				waypoints: wayPoints,
-				optimizeWaypoints: true
-			}
-
-			directionsService.route(request, (result, status) => {
-				console.log(status)
-				if (status == 'OK') {
-					// console.log(directionsDisplay)
-					console.log(result)
-					// directionsDisplay.setDirections(result)
-					this.setState({polyline: result.routes[0].overview_path})
-				}
-			})
+		const request = {
+			origin,
+			destination,
+			travelMode: 'WALKING',
+			waypoints: wayPoints,
+			optimizeWaypoints: true
 		}
-	}
 
-	deleteContent = (id) => {
-		axios.delete(`/api/content/${id}`)
-		.then(() => this.componentDidMount())
+		directionsService.route(request, (result, status) => {
+			console.log(status)
+			if (status === 'OK') {
+				console.log(result)
+				this.setState({ polyline: result.routes[0].overview_path })
+			}
+		})
 	}
 
 	mapClicked = (mapProps, map, clickEvent) => {
-		console.log(mapProps, map, clickEvent)
-		
+
 	}
 
-	markerClick = (props, marker, e) => {
-		console.log(props, marker, e)
-		this.setState({
-			activeMarker: marker,
-			showInfoWindow: true
-		})
+	markerClick = (props, marker) => {
+		this.props.setMarker(marker, true)
+	}
+
+	clearActiveMarker = () => {
+		this.props.setMarker({}, false)
 	}
 
 	render() {
-		const { lat, lng } = this.state.tour
+		const { lat, lng } = this.props.tour
 
-		const contentMarker = this.state.content.map(marker => {
+		const contentMarker = this.props.content.map((marker, index) => {
 			const { lat, lng } = marker
 			return (
 				<Marker
 					key={marker.id}
+					contentId={marker.id}
 					position={{ lat, lng }}
 					onClick={this.markerClick}
-					title={`POI: ${marker.order_pos}`}
+					title={`POI: ${index + 1}`}
 					name={marker.url}
 				/>
 			)
 		})
-		const contentList = this.state.content.map(item => {
 
-			return (
-				<li key={item.id}>POI {item.order_pos}:<button onClick={() => this.deleteContent(item.id)}>delete</button></li>
-			)
-		})
 		return (
-			<>
-				<ul>{contentList}</ul>
-				<Map
-					google={this.props.google}
-					zoom={17}
-					style={{ height: '100%', width: '100%' }}
-					center={{ lat, lng }}
-					// disableDefaultUI={true}
-					onClick={this.mapClicked}
-					ref={this.mapRef}
+			<Map
+				google={this.props.google}
+				zoom={17}
+				style={{ height: '90%', width: '100%' }}
+				center={{ lat, lng }}
+				disableDefaultUI={true}
+				// onClick={this.mapClicked}
+				ref={this.mapRef}
+			>
+
+				<Marker
+					position={{ lat, lng }}
+				/>
+
+				{contentMarker}
+
+				<InfoWindow
+					marker={this.props.activeMarker}
+					visible={this.props.showInfoWindow}
+					onClose={this.clearActiveMarker}
 				>
+					<audio controls src={this.props.activeMarker.name}></audio>
+				</InfoWindow>
 
-					<Marker
-						position={{ lat, lng }}
-					/>
+				<Polyline
+					path={this.state.polyline}
+					strokeColor="#0000FF"
+					strokeOpacity={0.8}
+					strokeWeight={3} />
 
-				
-
-					{contentMarker}
-
-					<InfoWindow 
-						marker={this.state.activeMarker}
-						visible={this.state.showInfoWindow}
-					>
-						<audio controls src={this.state.activeMarker.name}></audio>
-					</InfoWindow>
-
-					<Polyline
-          path={this.state.polyline}
-          strokeColor="#0000FF"
-          strokeOpacity={0.8}
-          strokeWeight={2} />
-
-				</Map>
-			</>
+			</Map>
 		)
 	}
 }
