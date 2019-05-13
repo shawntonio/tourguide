@@ -26,5 +26,15 @@ module.exports = {
 		db.getTourById({id}).then(tour => {
 			res.status(200).send(tour[0])
 		})
+	},
+
+	updateTour(req, res) {
+		const db = req.app.get('db')
+		const id = +req.params.id
+		const {type, duration, costs, price, difficulty} = req.body
+
+		db.updateTour({type, duration, costs, price, difficulty, id})
+		.then(() => res.sendStatus(200))
+		.catch(err => console.log(err))
 	}
 }
