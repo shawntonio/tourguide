@@ -13,6 +13,7 @@ import MyTours from './components/createTour/MyTours';
 import TourInfo from './components/createTour/TourInfo';
 import Content from './components/createTour/Content';
 import Preview from './components/createTour/editor/Preview';
+import Publish from './components/createTour/Publish';
 
 class App extends Component {
   componentDidMount() {
@@ -34,6 +35,7 @@ class App extends Component {
             <Route path='/tour-info' component={TourInfo} />
             <Route path='/content/:id/:count' component={Content} />
             <Route path='/preview/:id' component={Preview} />
+            <Route path='/publish/:id' component={Publish} />
           </Switch>
         </HashRouter>
       

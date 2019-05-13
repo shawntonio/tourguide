@@ -40,9 +40,13 @@ export default class Tour extends Component {
 					<Link to={`/preview/${id}`} >
 						<button>Preview</button>
 					</Link>
-					<button>Publish</button>
+					<Link to={`/publish/${id}`}>
+						<button>Publish</button>
+					</Link>
 				</div>
 				}
+
+				<button>Delete</button>
 
 			</div>
 		)
