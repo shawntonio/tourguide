@@ -40,6 +40,8 @@ app.get('/api/tour/:id', toursCtrl.getTourById)
 app.put('/api/tour/:id', toursCtrl.updateTour)
 app.delete('/api/tour/:id', toursCtrl.deleteTour)
 
+app.post('/api/paid', toursCtrl.addPaidTour)
+
 app.get('/api/sig', AwsCtrl.getSig)
 
 app.post('/api/content', ContentCtrl.createContent)

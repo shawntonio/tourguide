@@ -14,10 +14,13 @@ class PaymentForm extends Component {
 			token_id: token.id,
 			tour: this.props.tour
 		}
-		
+
 		Axios.post(`/stripe/charge`, body).then(() => {
 			this.setState({complete: true})
-			
+			Axios.post(`/api/paid`, {
+				user_id: this.props.user_id, 
+				tour_id: this.props.tour.id
+			}).catch(err => console.log(err))
 		}).catch(err => console.log(err))
 	}
 

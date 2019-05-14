@@ -58,5 +58,22 @@ module.exports = {
 		db.deleteTour({id})
 		.then(() => res.sendStatus(200))
 		.catch(err => console.log(err))
+	},
+
+	getPaidTours(req, res) {
+		const db = req.app.get('db')
+		const {login_id: user_id} = req.session.user
+
+		db.getPaidTours({user_id}).then(tours => {
+			res.status(200).send(tours)
+		})
+	},
+
+	addPaidTour(req, res) {
+		const db = req.app.get('db')
+		const {user_id, tour_id} = req.body
+
+		db.addPaidTour({user_id, tour_id})
+		.then(() => res.sendStatus(200))
 	}
 }
