@@ -19,3 +19,9 @@ create table content (
     lat float,
     lng float
 );
+
+create table tour_paid_for (
+    id serial primary key,
+    user_id int references users,
+    tour_id int references tour
+);

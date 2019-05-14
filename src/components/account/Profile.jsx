@@ -20,7 +20,7 @@ class Profile extends Component {
 		return (
 			<>
 				<button onClick={this.logout}>Logout</button>
-				<button onClick={() => this.props.history.push('/my-tours')}>My Tours</button>
+				<button onClick={() => this.props.history.push('/my-tours')}>Tour Work Bench</button>
 			</>
 		)
 	}

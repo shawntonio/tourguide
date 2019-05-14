@@ -13,13 +13,11 @@ export default class LocalTours extends Component {
 
 	componentDidMount() {
 		navigator.geolocation.getCurrentPosition(position => {
-			console.log(position.coords.latitude)
 			this.setState({
 				lat: position.coords.latitude,
 				lng: position.coords.longitude
 			})
 			Axios.get(`/api/tours?lat=${this.state.lat}&lng=${this.state.lng}`).then(res => {
-				console.log(this.state.lat, this.state.lng)
 				this.setState({tours: res.data})
 			})
 		}, err => console.log(err))
@@ -28,7 +26,7 @@ export default class LocalTours extends Component {
 
 	render(){
 		const tours = this.state.tours.map(tour => (
-			<Tour key={tour.id} tour={tour}/>
+			<Tour key={tour.id} tour={tour} buyable/>
 		))
 		return(
 			<div>

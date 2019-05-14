@@ -1,21 +1,21 @@
-import React, {Component} from 'react'
-import {Link, withRouter} from 'react-router-dom'
+import React, { Component } from 'react'
+import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
 import axios from 'axios';
 
 import { updateUser } from '../../store';
 import Tour from '../tours/Tour';
 
-class MyTours extends Component {
+class WorkBench extends Component {
 	state = {
 		tours: []
 	}
-	
+
 	async componentDidMount() {
 		await axios.get('/auth/user').then(res => {
 			const { login_id, username } = res.data
 			if (!login_id) {
-				this.props.history.push(`/account?${this.props.history.location}`)
+				this.props.history.push(`/account?${this.props.history.location.pathname}`)
 			} else {
 				this.props.updateUser(login_id, username)
 			}
@@ -36,17 +36,18 @@ class MyTours extends Component {
 
 	deleteTour = (id) => {
 		axios.delete(`/api/tour/${id}`)
-		.then(() => this.getTours())
+			.then(() => this.getTours())
 	}
 
 	render() {
 		const tours = this.state.tours.map(tour => (
 			<Tour key={tour.id} tour={tour} deleteTour={this.deleteTour} />
 		))
-		
+
 		return (
 			<div>
-				<h3>My Tours</h3>
+				<h3>Tour Work Bench</h3>
+				<Link to='/'>Home <br /></Link>
 				<Link to='/tour-info'>Create Tour</Link>
 				{tours}
 			</div>
@@ -55,12 +56,12 @@ class MyTours extends Component {
 }
 
 const mapStateToProps = state => {
-	const {login_id} = state
-	return {login_id}
+	const { login_id } = state
+	return { login_id }
 }
 
 const mapDispatchToProps = {
 	updateUser
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(MyTours))
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(WorkBench))

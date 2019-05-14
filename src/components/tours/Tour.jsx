@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Axios from 'axios';
 
+
 export default class Tour extends Component {
 	state = {
 		content: []
@@ -31,8 +32,10 @@ export default class Tour extends Component {
 				<p>${price}</p>
 				<p>Difficulty: {difficulty}</p>
 
-				{live && <div>
-					<button>Buy</button>
+				{live && this.props.buyable && <div>
+					<Link to={`/buy/${id}`}>
+						<button>Buy</button>
+					</Link>
 					<Link to={`/preview/${id}`}>
 						<button>Start</button>
 					</Link>

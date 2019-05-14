@@ -8,6 +8,7 @@ const authCtrl = require('./controllers/auth')
 const toursCtrl = require('./controllers/ToursCtrl')
 const AwsCtrl = require('./controllers/AwsCtrl')
 const ContentCtrl = require('./controllers/ContentCtrl')
+const StripeCtrl = require('./controllers/Stripe')
 const GoogleCtrl = require('./controllers/GoogleCtrl')
 
 const {SERVER_PORT, CONNECTION_STRING, SESSION_SECRET} = process.env
@@ -45,4 +46,6 @@ app.post('/api/content', ContentCtrl.createContent)
 app.get('/api/content/:id', ContentCtrl.readContent)
 app.delete('/api/content/:id', AwsCtrl.deleteObject)
 
-app.post('/api/route', GoogleCtrl.getDirections)
+app.post('/google/route', GoogleCtrl.getDirections)
+
+app.post('/stripe/charge', StripeCtrl.charge)
