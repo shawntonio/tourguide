@@ -11,7 +11,7 @@ import Account from './components/account/Account';
 import MyTours from './components/createTour/WorkBench';
 import TourInfo from './components/createTour/TourInfo';
 import Content from './components/createTour/Content';
-import Preview from './components/createTour/editor/Preview';
+import TourView from './components/createTour/editor/TourView';
 import Publish from './components/createTour/Publish';
 import LocalTours from './components/tours/LocalTours';
 import Buy from './components/tours/Buy';
@@ -41,7 +41,7 @@ class App extends Component {
             <Route path='/my-tours' component={MyTours} />
             <Route path='/tour-info' component={TourInfo} />
             <Route path='/content/:id/:count' component={Content} />
-            <Route path='/preview/:id' component={Preview} />
+            <Route path='/tour-view/:id' component={TourView} />
             <Route path='/publish/:id' component={Publish} />
           </Switch>
         </HashRouter>

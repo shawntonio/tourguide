@@ -6,7 +6,7 @@ import {connect} from 'react-redux'
 import ContentMap from '../../maps/ContentMap'
 import EditorHeader from './EditorHeader'
 
-class Preview extends Component {
+class TourView extends Component {
 
 	state = {
 		tour: {},
@@ -65,4 +65,4 @@ const mapStateToProps = state => {
 	return {login_id}
 }
 
-export default connect(mapStateToProps)(withRouter(Preview))
+export default connect(mapStateToProps)(withRouter(TourView))

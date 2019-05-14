@@ -36,7 +36,7 @@ export default class Tour extends Component {
 					<Link to={`/buy/${id}`}>
 						<button>Buy</button>
 					</Link>
-					<Link to={`/preview/${id}`}>
+					<Link to={`/tour-view/${id}`}>
 						<button>Start</button>
 					</Link>
 				</div>
@@ -48,8 +48,8 @@ export default class Tour extends Component {
 					<Link to={`/content/${id}/${this.state.content.length}`} >
 						<button>Add Point of Interest</button>
 					</Link>
-					<Link to={`/preview/${id}`} >
-						<button>Preview</button>
+					<Link to={`/tour-view/${id}`} >
+						<button>Editor</button>
 					</Link>
 					<Link to={`/publish/${id}`}>
 						<button>Publish</button>
