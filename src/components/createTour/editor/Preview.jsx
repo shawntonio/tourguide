@@ -43,13 +43,13 @@ class Preview extends Component {
 	}
 
 	render() {
-		const { id } = this.props.match.params
+		const { id, user_id } = this.props.match.params
 		return (
 			<div style={{ height: '100vh', width: '100vw' }}>
 
 				<header style={{marginBottom: '5px'}}>
 					logo
-					{this.state.showInfoWindow && <EditorHeader activeMarker={this.state.activeMarker} deleteContent={this.deleteContent} />}
+					{this.state.showInfoWindow && this.props.login_id === user_id && <EditorHeader activeMarker={this.state.activeMarker} deleteContent={this.deleteContent} />}
 
 				</header>
 				{
