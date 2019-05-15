@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import Axios from 'axios';
 
-import ToursHeader from './ToursHeader';
+import ToursHeader from './toursHeader/ToursHeader';
 import Tour from './Tour';
 
 class MyTours extends Component {

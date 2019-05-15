@@ -1,0 +1,22 @@
+$green: #04381C;
+
+.tours-header {
+	display: flex;
+	justify-content: space-between;
+	padding: 10px 20px;
+	box-shadow: 0px 1px 5px black;
+	align-items: center;
+	i {
+		color: black;
+	}
+}
+
+.tours_header_nav {
+	display: flex;
+	justify-content: space-evenly;
+	padding: 10px;
+	.link {
+		color: black;
+		text-decoration: none;
+	}
+}

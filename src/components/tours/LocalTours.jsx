@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Axios from 'axios';
 
 import Tour from './Tour';
-import ToursHeader from './ToursHeader';
+import ToursHeader from './toursHeader/ToursHeader';
 
 export default class LocalTours extends Component {
 	state = {

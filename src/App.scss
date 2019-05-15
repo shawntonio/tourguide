@@ -1,9 +1,24 @@
+@import './components/tours/toursHeader/toursHeader';
+
+$yellow: #EEB800;
+$blue: #12135A;
+$green: #04381C;
+
 body {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-
-
-
-
+button {
+  background-color: $blue;
+  color: #ffff;
+  font-weight: bolder;
+  font-size: 14px;
+  border-radius: 5px;
+  border: none;
+  padding: 4px 5px;
+  font-variant-caps: all-petite-caps;
+  display: flex;
+  align-items: center;
+}
