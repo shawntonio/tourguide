@@ -14,6 +14,8 @@ class Buy extends Component {
 		tour: {}
 	}
 
+	
+
 	async componentDidMount() {
 		const {login_id} = this.props
 		const {id} = this.props.match.params

@@ -41,6 +41,7 @@ app.put('/api/tour/:id', toursCtrl.updateTour)
 app.delete('/api/tour/:id', toursCtrl.deleteTour)
 
 app.post('/api/paid', toursCtrl.addPaidTour)
+app.get('/api/paid', toursCtrl.getPaidTours)
 
 app.get('/api/sig', AwsCtrl.getSig)
 

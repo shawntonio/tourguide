@@ -43,7 +43,9 @@ class TourView extends Component {
 	}
 
 	render() {
-		const { id, user_id } = this.props.match.params
+		const { id } = this.props.match.params
+		const { user_id } = this.state.tour
+
 		return (
 			<div style={{ height: '100vh', width: '100vw' }}>
 

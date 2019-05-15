@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import Axios from 'axios';
+import {withRouter} from 'react-router-dom';
 
 class PaymentForm extends Component {
 	state = {
@@ -20,7 +21,8 @@ class PaymentForm extends Component {
 			Axios.post(`/api/paid`, {
 				user_id: this.props.user_id, 
 				tour_id: this.props.tour.id
-			}).catch(err => console.log(err))
+			}).then(() => this.props.history.push('/my-tours'))
+			.catch(err => console.log(err))
 		}).catch(err => console.log(err))
 	}
 
@@ -37,4 +39,4 @@ class PaymentForm extends Component {
 	}
 }
 
-export default injectStripe(PaymentForm)
+export default injectStripe(withRouter(PaymentForm))

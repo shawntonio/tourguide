@@ -36,6 +36,10 @@ export default class Tour extends Component {
 					<Link to={`/buy/${id}`}>
 						<button>Buy</button>
 					</Link>
+				</div>
+				}
+
+				{live && this.props.bought && <div>	
 					<Link to={`/tour-view/${id}`}>
 						<button>Start</button>
 					</Link>

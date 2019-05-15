@@ -9,14 +9,12 @@ class ContentMap extends Component {
 
 		this.state = {
 			directionsDisplay: null,
-			polyline: null
+			polyline: []
 		}
 	}
 
 	async componentDidMount() {
 		const directionsService = await new this.props.google.maps.DirectionsService()
-
-		console.log(this.mapRef.current.map)
 
 		const { lat, lng } = this.props.tour
 		const { lat: latd, lng: lngd } = this.props.content[this.props.content.length - 1]
@@ -38,9 +36,7 @@ class ContentMap extends Component {
 		}
 
 		directionsService.route(request, (result, status) => {
-			console.log(status)
 			if (status === 'OK') {
-				console.log(result)
 				this.setState({ polyline: result.routes[0].overview_path })
 			}
 		})

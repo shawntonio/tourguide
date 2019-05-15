@@ -19,7 +19,7 @@ class Account extends Component {
 				<header>
 					<h3>Account</h3>
 					<Link to="/">
-						close
+						<i className="fa fa-times" aria-hidden="true"></i>
 					</Link>
 				
 				</header>

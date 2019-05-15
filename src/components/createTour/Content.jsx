@@ -43,7 +43,6 @@ class Content extends Component {
 	}
 	
 	render() {
-		const {id} = this.props.match.params
 		return (
 			<div>
 				<Recorder getSig={this.getSig} />
