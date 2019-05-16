@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Marker, Map, InfoWindow, GoogleApiWrapper, Polyline } from 'google-maps-react';
+import pin from './map-pin-solid.svg';
+import mainMarker from './map-marker-alt-solid.svg'
 
 class ContentMap extends Component {
 	constructor(props) {
@@ -11,11 +13,23 @@ class ContentMap extends Component {
 			directionsDisplay: null,
 			polyline: []
 		}
+		this.getPolyline = this.getPolyline.bind(this)
 	}
 
-	async componentDidMount() {
-		const directionsService = await new this.props.google.maps.DirectionsService()
+	componentDidMount() {
+		if (this.props.content[0]) this.getPolyline()
+	}
 
+	componentDidUpdate(prevProps) {
+		if (prevProps.content.length !== this.props.content.length) {
+			console.log('hit')
+			this.getPolyline()
+		}
+	}
+
+	async getPolyline() {
+		const directionsService = await new this.props.google.maps.DirectionsService()
+			
 		const { lat, lng } = this.props.tour
 		const { lat: latd, lng: lngd } = this.props.content[this.props.content.length - 1]
 		const origin = await new this.props.google.maps.LatLng(lat, lng)
@@ -36,6 +50,7 @@ class ContentMap extends Component {
 		}
 
 		directionsService.route(request, (result, status) => {
+			console.log(status)
 			if (status === 'OK') {
 				this.setState({ polyline: result.routes[0].overview_path })
 			}
@@ -43,7 +58,7 @@ class ContentMap extends Component {
 	}
 
 	mapClicked = (mapProps, map, clickEvent) => {
-
+		this.props.mapClicked(clickEvent.latLng)
 	}
 
 	markerClick = (props, marker) => {
@@ -56,35 +71,58 @@ class ContentMap extends Component {
 
 	render() {
 		const { lat, lng } = this.props.tour
+		const {addMarkerLatLng} = this.props
 
-		const contentMarker = this.props.content.map((marker, index) => {
-			const { lat, lng } = marker
-			return (
-				<Marker
-					key={marker.id}
-					contentId={marker.id}
-					position={{ lat, lng }}
-					onClick={this.markerClick}
-					title={`POI: ${index + 1}`}
-					name={marker.url}
-				/>
-			)
-		})
+		if (this.props.content) {
+			var contentMarker = this.props.content.map((marker, index) => {
+				const { lat, lng } = marker
+				return (
+					<Marker
+						key={marker.id}
+						contentId={marker.id}
+						position={{ lat, lng }}
+						onClick={this.markerClick}
+						title={`POI: ${index + 1}`}
+						name={marker.url}
+						icon={{
+							url: pin,
+							anchor: new this.props.google.maps.Point(20,40),
+							scaledSize: new this.props.google.maps.Size(40,40) 
+						}}
+					/>
+				)
+			})
+		}
 
 		return (
 			<Map
 				google={this.props.google}
 				zoom={17}
 				style={{ height: '90%', width: '100%' }}
-				center={{ lat, lng }}
+				initialCenter={{ lat, lng }}
 				disableDefaultUI={true}
-				// onClick={this.mapClicked}
+				onClick={this.mapClicked}
 				ref={this.mapRef}
 			>
-
-				<Marker
+				{this.props.content && <Marker
 					position={{ lat, lng }}
-				/>
+					// icon={{
+					// 	url: mainMarker,
+					// 	anchor: new this.props.google.maps.Point(20,40),
+					// 	scaledSize: new this.props.google.maps.Size(40,40) 
+					// }}
+				/>}
+				
+
+				{addMarkerLatLng && <Marker 
+					name={'addContent'}
+					position={{ lat: addMarkerLatLng.lat(), lng: addMarkerLatLng.lng()}}
+					icon={{
+						url: pin,
+						anchor: new this.props.google.maps.Point(20,40),
+						scaledSize: new this.props.google.maps.Size(40,40) 
+					}}
+				/> }
 
 				{contentMarker}
 
@@ -98,9 +136,10 @@ class ContentMap extends Component {
 
 				<Polyline
 					path={this.state.polyline}
-					strokeColor="#0000FF"
+					strokeColor="#12135A"
 					strokeOpacity={0.8}
-					strokeWeight={3} />
+					strokeWeight={3}
+					 />
 
 			</Map>
 		)

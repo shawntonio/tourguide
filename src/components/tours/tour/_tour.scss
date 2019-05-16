@@ -1,0 +1,44 @@
+.tour {
+	width: 80%;
+	box-shadow: 3px 3px 4px $green;
+	border-radius: 10px;
+	padding: 10px;
+	color: $green;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 12px 0;
+}
+
+.tour-title {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	h3 {
+		margin-right: 10px;
+	}
+	p {
+		font-size: 12px;
+	}
+}
+
+.tour-specs {
+	display: flex;
+	justify-content: space-evenly;
+	align-items: center;
+	width: 100%;
+}
+
+.tour-spec {
+	font-weight: bolder;
+	font-variant-caps: small-caps;
+}
+
+.tour-buttons {
+	width: 100%;
+	div {
+		display: flex;
+		justify-content: space-evenly;
+	}
+}
+

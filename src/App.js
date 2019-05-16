@@ -5,14 +5,13 @@ import { connect } from 'react-redux';
 import Axios from 'axios';
 import {StripeProvider} from 'react-stripe-elements';
 
-import { updateUser } from './store';
+import { updateUser, setLocation } from './store';
 import Account from './components/account/Account';
 import WorkBench from './components/createTour/WorkBench';
-import TourInfo from './components/createTour/TourInfo';
-import Content from './components/createTour/Content';
+import CreateTour from './components/createTour/CreateTour';
 import TourView from './components/createTour/editor/TourView';
 import Publish from './components/createTour/Publish';
-import LocalTours from './components/tours/LocalTours';
+import LocalTours from './components/tours/localTours/LocalTours';
 import Buy from './components/tours/Buy';
 import MyTours from './components/tours/MyTours';
 
@@ -22,6 +21,13 @@ class App extends Component {
       const { login_id, username } = res.data
       this.props.updateUser(login_id, username)
     }).catch(err => console.log(err))
+
+    navigator.geolocation.getCurrentPosition(position => {
+			this.props.setLocation({
+        lat: position.coords.latitude, 
+        lng: position.coords.longitude
+      })
+    }, err => console.log(err))
   }
 
   render() {
@@ -37,8 +43,7 @@ class App extends Component {
 
             <Route path='/account' component={Account} />
             <Route path='/workbench' component={WorkBench} />
-            <Route path='/tour-info' component={TourInfo} />
-            <Route path='/content/:id/:count' component={Content} />
+            <Route path='/tour-info' component={CreateTour} />
             <Route path='/tour-view/:id' component={TourView} />
             <Route path='/publish/:id' component={Publish} />
           </Switch>
@@ -50,7 +55,8 @@ class App extends Component {
 }
 
 const mapDispatchToProps = {
-  updateUser
+  updateUser,
+  setLocation
 }
 
 export default connect(null, mapDispatchToProps)(App);

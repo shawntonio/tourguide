@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import ChooseMap from '../../maps/ChooseMap';
+// import getSig from './GetSig'
+import Axios from 'axios';
+import {v4 as randomString} from 'uuid';
 
 export default class Recorder extends Component {
 	constructor(props) {
@@ -10,8 +12,7 @@ export default class Recorder extends Component {
 		this.state = {
 			mediaRecorder: null,
 			chunks: [],
-			blob: null,
-			location: null
+			blob: null		
 		}
 	}
 	componentDidMount(){
@@ -48,6 +49,35 @@ export default class Recorder extends Component {
 		}
 	}
 
+	getSig = (blob, location, tourId) => {
+		const filename = `tour${tourId}content${randomString()}`
+	
+		Axios.get('/api/sig', {
+			params: {
+				filename,
+				filetype: blob.type
+			}
+		}).then(res => {
+			const {signedRequest, url} = res.data
+			this.uploadBlob(blob, signedRequest, url, location, filename, tourId)
+		}).catch(err => console.log(err))
+	}
+	
+	uploadBlob = (blob, signedRequest, url, location, object_key, tour_id) => {
+		const options = {
+			headers: {
+				'Content-Type': blob.type,
+			},
+		}
+		Axios.put(signedRequest, blob, options)
+		.then(() => {
+			Axios.post('/api/content', {url, tour_id, location, object_key})
+			.then(() => this.props.clearAddMarker())
+			.catch(err => console.log(err))
+		})
+		.catch(err => console.log(err))
+	}
+
 	startRecording = () => {
 		const {mediaRecorder} = this.state
 		mediaRecorder.start()
@@ -59,20 +89,24 @@ export default class Recorder extends Component {
 		console.log(this.state.mediaRecorder.state)
 	}
 
-	clickLocation = (location) => {
-		this.setState({ location })
+	addPOI = () => {
+		const lat = this.props.addMarkerLatLng.lat()
+		const lng = this.props.addMarkerLatLng.lng()
+		this.getSig(this.state.blob, {lat, lng}, this.props.tourId)
 	}
 
 	render() {
 		return(
 			<div>
 				<div className="recordButtons">
-					<button onClick={this.startRecording}>record</button>
-					<button onClick={this.stopRecording}>stop</button>
+					<i className="fas fa-dot-circle fa-2x" onClick={this.startRecording}></i>
+					<i className="fas fa-stop-circle fa-2x" onClick={this.stopRecording}></i>
 				</div>
-				{this.state.blob && <audio ref={this.audioRef} controls ></audio> }
-				<ChooseMap clickLocation={this.clickLocation} currentLocation={this.state.location} />
-				<button onClick={() => this.props.getSig(this.state.blob, this.state.location)}>Add Point of Interest</button>
+				{this.state.blob && <div>
+						<audio ref={this.audioRef} controls ></audio> 
+						<button onClick={this.addPOI}>Add Point of Interest</button>
+					</div>
+				}
 				
 			</div>
 		)

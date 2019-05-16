@@ -3,20 +3,18 @@ import axios from 'axios';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import Map from '../maps/ChooseMap';
+import ContentMap from '../maps/ContentMap';
 
 class TourInfo extends Component {
 	state = {
 		name: '',
-		location: {}
+		location: null,
+		addMarkerLatLng: null,
+		showAddMarker: false
 	}
 
 	componentDidMount() {
 		!this.props.username && this.props.history.replace(`/account?${this.props.history.location.pathname}`)
-	}
-
-	clickLocation = (location) => {
-		this.setState({ location })
 	}
 
 	inputHandler = (e) => {
@@ -24,29 +22,51 @@ class TourInfo extends Component {
 		this.setState({ [name]: value })
 	}
 
+	mapClicked = (latLng) => {
+		this.setState({
+			addMarkerLatLng: latLng,
+			showAddMarker: true
+		})
+	}
+
 	createTourHandler = (e) => {
 		e.preventDefault()
-		axios.post('/api/tours', this.state).then(() => {
-			this.props.history.push('/my-tours')
+
+		const location = {
+			lat: this.state.addMarkerLatLng.lat(),
+			lng: this.state.addMarkerLatLng.lng()
+		}
+		const {name} = this.state
+
+		axios.post('/api/tours', {name, location}).then(() => {
+			this.props.history.push('/workbench')
 		}).catch(err => console.log(err))
-		
 	}
 
 	render() {
 		const { name } = this.state
+		console.log(this.state.addMarkerLatLng)
 		return (
 			<div>
 				<h1>Create a Tour</h1>
-				<form onSubmit={this.createTourHandler}>
+				<form onSubmit={this.createTourHandler} className='create-tour-form'>
 					<div className="inputs">
 						<label>Tour Name:</label>
 						<input name='name' value={name} type="text" onChange={this.inputHandler} />
 					</div>
 
-					<Map clickLocation={this.clickLocation} currentLocation={this.state.location} />
+					<label htmlFor="">Choose Starting Location</label>
 
 					<button>Create Tour</button>
 				</form>
+
+				{this.props.loc.lat && <ContentMap 
+					tour={{...this.props.loc}} 
+					activeMarker={{}} 
+					addMarkerLatLng={this.state.addMarkerLatLng} 
+					showAddMarker={this.state.showAddMarker} 
+					mapClicked={this.mapClicked}
+				/>}
 
 			</div>
 		)
@@ -54,8 +74,8 @@ class TourInfo extends Component {
 }
 
 const mapStateToProps = state => {
-	const {username} = state
-	return {username}
+	const { username, loc } = state
+	return { username, loc }
 }
 
 export default connect(mapStateToProps)(withRouter(TourInfo))

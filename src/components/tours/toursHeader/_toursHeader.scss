@@ -1,10 +1,13 @@
-$green: #04381C;
+
+.link {
+	color: black;
+	text-decoration: none;
+}
 
 .tours-header {
 	display: flex;
 	justify-content: space-between;
 	padding: 10px 20px;
-	box-shadow: 0px 1px 5px black;
 	align-items: center;
 	i {
 		color: black;
@@ -15,8 +18,16 @@ $green: #04381C;
 	display: flex;
 	justify-content: space-evenly;
 	padding: 10px;
+	background-color: $green;	
+	box-shadow: 0px 4px 4px black;
+	margin-bottom: 10px;
 	.link {
-		color: black;
-		text-decoration: none;
+		color: white;
 	}
 }
+
+.logo, .fa-user-circle:before {
+	margin: 0;
+	color: $green;
+}
+

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import axios from 'axios';
 
 import { updateUser } from '../../store';
-import Tour from '../tours/Tour';
+import Tour from '../tours/tour/Tour';
 
 class WorkBench extends Component {
 	state = {
@@ -46,10 +46,12 @@ class WorkBench extends Component {
 
 		return (
 			<div>
-				<h3>Tour Work Bench</h3>
+				<h3>Tour Workbench</h3>
 				<Link to='/'>Home <br /></Link>
 				<Link to='/tour-info'>Create Tour</Link>
-				{tours}
+				<div className="tours">
+					{tours}
+				</div>
 			</div>
 		)
 	}

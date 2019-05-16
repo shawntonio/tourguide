@@ -2,12 +2,13 @@ import {createStore} from 'redux';
 
 const initialState = {
 	username: '',
-	login_id: null
+	login_id: null,
+	loc: {lat: null, lng: null}
 }
 
 export const SET_USER = 'SET_USER'
-export const GET_USER = 'GET_USER'
 export const CLEAR_USER = 'CLEAR_USER'
+export const SET_LOCATION = 'SET_LOCATION'
 
 export function updateUser(login_id, username) {
 	return {
@@ -18,8 +19,19 @@ export function updateUser(login_id, username) {
 
 export function clearUser() {
 	return {
-		type: CLEAR_USER,
+		type: CLEAR_USER
 	}
+}
+
+export function setLocation(loc) {
+	return {
+		type: SET_LOCATION,
+		payload: {loc}
+	}
+}
+
+export function getLocation() {
+	return 
 }
 
 const userReducer = (state = initialState, action) => {
@@ -29,6 +41,8 @@ const userReducer = (state = initialState, action) => {
 			return {...state, ...payload}
 		case CLEAR_USER:
 			return initialState
+		case SET_LOCATION:
+			return {...state, ...payload}
 		default:
 			return state
 	}

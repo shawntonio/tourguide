@@ -1,9 +1,8 @@
-insert into content (tour_id, url, lat, lng, order_pos, object_key)
+insert into content (tour_id, url, lat, lng, object_key)
 values (
     ${tour_id},
     ${url},
     ${lat},
     ${lng},
-    ${order_pos},
     ${object_key}
 );

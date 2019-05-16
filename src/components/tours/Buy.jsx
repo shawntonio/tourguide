@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Elements } from 'react-stripe-elements';
 import { connect } from 'react-redux';
-import {withRouter} from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Axios from 'axios';
 
 
@@ -14,12 +14,12 @@ class Buy extends Component {
 		tour: {}
 	}
 
-	
+
 
 	async componentDidMount() {
-		const {login_id} = this.props
-		const {id} = this.props.match.params
-		if(!login_id) {
+		const { login_id } = this.props
+		const { id } = this.props.match.params
+		if (!login_id) {
 			Axios.get('/auth/user').then(res => {
 				const { login_id, username } = res.data
 				if (!login_id) {
@@ -36,12 +36,12 @@ class Buy extends Component {
 	}
 
 	render() {
-		const {name} = this.state.tour
+		const { name } = this.state.tour
 		return (
 			<div>
 				<h1>{name}</h1>
 				<Elements>
-					<PaymentForm tour={this.state.tour} user_id={this.props.login_id}/>
+					<PaymentForm tour={this.state.tour} user_id={this.props.login_id} />
 				</Elements>
 			</div>
 		)
@@ -49,8 +49,8 @@ class Buy extends Component {
 }
 
 const mapStateToProps = state => {
-	const {login_id} = state
-	return {login_id}
+	const { login_id } = state
+	return { login_id }
 }
 
 const mapDispatchToProps = {

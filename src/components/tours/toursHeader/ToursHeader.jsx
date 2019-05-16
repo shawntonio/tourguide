@@ -4,8 +4,8 @@ import {Link} from 'react-router-dom';
 const ToursHeader = (props) => (
 	<header>
 		<div className="tours-header">
-			<Link to='/'>
-				<i className="fa fa-globe fa-2x" aria-hidden="true"></i>
+			<Link className='link' to='/'>
+				<h1 className='logo'>LOX</h1>
 			</Link>
 			<Link to='/tour-info'>
 				<button>
@@ -13,7 +13,7 @@ const ToursHeader = (props) => (
 				</button>
 			</Link>
 			<Link to='/account'>
-				<i className="fa fa-user-circle-o fa-2x" aria-hidden="true"></i>
+			<i className="fas fa-user-circle fa-2x"></i>
 			</Link>
 		</div>
 		<nav className='tours_header_nav'>

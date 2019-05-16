@@ -27,7 +27,7 @@ export default class Publish extends Component {
 		const {type, duration, difficulty, costs, price} = this.state
 		Axios.put(`/api/tour/${this.props.match.params.id}`, {type, duration, costs, price, difficulty})
 		.then(() => {
-			this.props.history.push('/my-tours')
+			this.props.history.push('/workbench')
 		}).catch(err => console.log(err))
 	}
 
@@ -47,7 +47,6 @@ export default class Publish extends Component {
 							<option value="hike">Hike</option>
 							<option value="scenic drive">Scenic Drive</option>
 							<option value="indoors">Indoors</option>
-							<option value="other">Other</option>
 						</select>
 					</div>
 

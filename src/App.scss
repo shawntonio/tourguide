@@ -1,8 +1,12 @@
-@import './components/tours/toursHeader/toursHeader';
-
 $yellow: #EEB800;
 $blue: #12135A;
 $green: #04381C;
+
+@import './components/tours/toursHeader/toursHeader';
+@import './components/tours/tour/tour';
+@import './components/tours/localTours/localTours';
+@import './components/createTour/createTour';
+@import './components/maps/map';
 
 body {
   margin: 0;
@@ -20,5 +24,11 @@ button {
   padding: 4px 5px;
   font-variant-caps: all-petite-caps;
   display: flex;
+  align-items: center;
+}
+
+.tours {
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
