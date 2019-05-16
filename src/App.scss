@@ -6,9 +6,9 @@ $green: #04381C;
 @import './components/tours/tour/tour';
 @import './components/tours/localTours/localTours';
 @import './components/createTour/createTour';
-@import './components/maps/map';
+@import './components/createTour/editor/tourView';
 
-body {
+body, h1, h2, h3, h4, h5, h6 {
   margin: 0;
   padding: 0;
   box-sizing: border-box;

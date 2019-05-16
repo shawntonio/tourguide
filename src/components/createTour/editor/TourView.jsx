@@ -15,7 +15,8 @@ class TourView extends Component {
 		activeMarker: {},
 		showInfoWindow: false,
 		loadMap: false,
-		addMarkerLatLng: null
+		addMarkerLatLng: null,
+		prompt: 'Click map to add point of interest'
 	}
 
 	async componentDidMount() {
@@ -55,7 +56,7 @@ class TourView extends Component {
 	mapClicked = (latLng) => {
 		this.setState({
 			addMarkerLatLng: latLng,
-			showAddMarker: true
+			showInfoWindow: false
 		})
 	}
 
@@ -64,34 +65,45 @@ class TourView extends Component {
 		this.getContent()
 	}
 
+	changePrompt = text => {
+		this.setState({prompt: text})
+	}
+
 	render() {
 		const { id } = this.props.match.params
 		const { user_id, name, id: tourId } = this.state.tour
 
 		return (
-			<div style={{ height: '100vh', width: '100vw' }}>
+			<div className="tour-view">
 
 				<header style={{ marginBottom: '15px' }}>
-					<h2>{name}</h2>
+					<div className="tour-view-title" >
+						<i className="fas fa-chevron-left" onClick={() => this.props.history.goBack()}></i>
+						<h2>{name}</h2>
+						<input type="text" name="search" id="" placeholder="search" className="map-search" />
+					</div>
 					{this.state.showInfoWindow && this.props.login_id === user_id && <EditorHeader 
 						activeMarker={this.state.activeMarker} 
 						deleteContent={this.deleteContent} 
 					/>}
 
+					{!this.state.addMarkerLatLng && !this.state.showInfoWindow && this.props.login_id === user_id && <p className='prompt'>{this.state.prompt}</p>}
+
 					{this.state.addMarkerLatLng && <Recorder 
 						addMarkerLatLng={this.state.addMarkerLatLng}
 						tourId={tourId} 
-						clearAddMarker={this.clearAddMarker} 
+						clearAddMarker={this.clearAddMarker}
+						changePrompt={this.changePrompt} 
 					 />}
 
 				</header>
 
-				{this.state.loadMap && <ContentMap 
-					id={id} 
-					setMarker={this.setMarker} 
-					mapClicked={this.mapClicked} 
-					{...this.state} 
-				/>}
+				{this.state.loadMap && <div className='map'><ContentMap
+				id={id}
+				setMarker={this.setMarker}
+				mapClicked={this.mapClicked}
+				{...this.state}
+				/></div>}
 
 			</div>
 		)

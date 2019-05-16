@@ -1,14 +1,11 @@
 import React, {Component} from 'react';
-// import getSig from './GetSig'
 import Axios from 'axios';
 import {v4 as randomString} from 'uuid';
 
 export default class Recorder extends Component {
 	constructor(props) {
 		super(props)
-
 		this.audioRef = React.createRef();
-
 		this.state = {
 			mediaRecorder: null,
 			chunks: [],
@@ -72,7 +69,10 @@ export default class Recorder extends Component {
 		Axios.put(signedRequest, blob, options)
 		.then(() => {
 			Axios.post('/api/content', {url, tour_id, location, object_key})
-			.then(() => this.props.clearAddMarker())
+			.then(() => {
+				this.props.clearAddMarker()
+				this.props.changePrompt('Click marker to edit point of interest')
+			})
 			.catch(err => console.log(err))
 		})
 		.catch(err => console.log(err))

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Marker, Map, InfoWindow, GoogleApiWrapper, Polyline } from 'google-maps-react';
 import pin from './map-pin-solid.svg';
-import mainMarker from './map-marker-alt-solid.svg'
 
 class ContentMap extends Component {
 	constructor(props) {
@@ -18,11 +17,11 @@ class ContentMap extends Component {
 
 	componentDidMount() {
 		if (this.props.content[0]) this.getPolyline()
+		console.log(this.props.google)
 	}
 
 	componentDidUpdate(prevProps) {
 		if (prevProps.content.length !== this.props.content.length) {
-			console.log('hit')
 			this.getPolyline()
 		}
 	}
@@ -53,6 +52,8 @@ class ContentMap extends Component {
 			console.log(status)
 			if (status === 'OK') {
 				this.setState({ polyline: result.routes[0].overview_path })
+			} else if (status === 'ZERO_RESULTS') {
+				window.location.reload()
 			}
 		})
 	}
@@ -98,7 +99,7 @@ class ContentMap extends Component {
 			<Map
 				google={this.props.google}
 				zoom={17}
-				style={{ height: '90%', width: '100%' }}
+				style={{ height: '100%', width: '100%' }}
 				initialCenter={{ lat, lng }}
 				disableDefaultUI={true}
 				onClick={this.mapClicked}
@@ -139,7 +140,7 @@ class ContentMap extends Component {
 					strokeColor="#12135A"
 					strokeOpacity={0.8}
 					strokeWeight={3}
-					 />
+				/>
 
 			</Map>
 		)
