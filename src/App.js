@@ -7,7 +7,7 @@ import {StripeProvider} from 'react-stripe-elements';
 
 import { updateUser, setLocation } from './store';
 import Account from './components/account/Account';
-import WorkBench from './components/createTour/WorkBench';
+import Workbench from './components/createTour/workbench/Workbench';
 import CreateTour from './components/createTour/CreateTour';
 import TourView from './components/createTour/editor/TourView';
 import Publish from './components/createTour/Publish';
@@ -42,7 +42,7 @@ class App extends Component {
             <Route path='/my-tours' component={MyTours} />
 
             <Route path='/account' component={Account} />
-            <Route path='/workbench' component={WorkBench} />
+            <Route path='/workbench' component={Workbench} />
             <Route path='/tour-info' component={CreateTour} />
             <Route path='/tour-view/:id' component={TourView} />
             <Route path='/publish/:id' component={Publish} />

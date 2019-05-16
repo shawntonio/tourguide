@@ -2,11 +2,21 @@ $yellow: #EEB800;
 $blue: #12135A;
 $green: #04381C;
 
+%green-header {
+  background-color: $green;
+	padding: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	color: #fff;
+}
+
 @import './components/tours/toursHeader/toursHeader';
 @import './components/tours/tour/tour';
 @import './components/tours/localTours/localTours';
 @import './components/createTour/createTour';
 @import './components/createTour/editor/tourView';
+@import './components/createTour/workbench/workbench';
 
 body, h1, h2, h3, h4, h5, h6 {
   margin: 0;

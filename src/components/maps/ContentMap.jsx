@@ -105,7 +105,7 @@ class ContentMap extends Component {
 				onClick={this.mapClicked}
 				ref={this.mapRef}
 			>
-				{this.props.content && <Marker
+				{this.props.content[0] && <Marker
 					position={{ lat, lng }}
 					// icon={{
 					// 	url: mainMarker,

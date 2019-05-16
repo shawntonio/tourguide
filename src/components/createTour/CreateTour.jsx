@@ -45,7 +45,6 @@ class TourInfo extends Component {
 
 	render() {
 		const { name } = this.state
-		console.log(this.state.addMarkerLatLng)
 		return (
 			<div>
 				<h1>Create a Tour</h1>
@@ -63,6 +62,7 @@ class TourInfo extends Component {
 				{this.props.loc.lat && <ContentMap 
 					tour={{...this.props.loc}} 
 					activeMarker={{}} 
+					content={[]}
 					addMarkerLatLng={this.state.addMarkerLatLng} 
 					showAddMarker={this.state.showAddMarker} 
 					mapClicked={this.mapClicked}

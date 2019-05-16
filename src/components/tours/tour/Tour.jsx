@@ -25,6 +25,7 @@ export default class Tour extends Component {
 		const { id, name, costs, type, duration, price, difficulty, live } = this.props.tour
 		return (
 			<div className='tour'>
+				{live && this.props.deleteTour && <div className='live-tour'>live</div>}
 				<div className='tour-title'>
 					<h3>{name}</h3>
 					<p>by @(username)</p>
@@ -63,21 +64,19 @@ export default class Tour extends Component {
 					</div>
 					}
 					
-
-					{!live && <div>
-						{/* <Link to={`/content/${id}/${this.state.content.length}`} >
-							<button>Add Point of Interest</button>
-						</Link> */}
-						<Link to={`/tour-view/${id}`} >
-							<button>Editor</button>
-						</Link>
-						<Link to={`/publish/${id}`}>
+					{this.props.deleteTour && <div>
+						<button onClick={() => this.deleteTour(id)}>Delete</button>
+						{!live &&
+							<Link to={`/tour-view/${id}`} >
+								<button>Editor</button>
+							</Link>
+						}
+						{!live &&
+							<Link to={`/publish/${id}`}>
 							<button>Publish</button>
 						</Link>
-					</div>
-					}
-
-					{this.props.deleteTour && <button onClick={() => this.deleteTour(id)}>Delete</button>}
+						}	
+					</div>}
 				</div>
 
 				

@@ -1,0 +1,12 @@
+.workbench-header {
+	@extend %green-header;
+	box-shadow: 0px 4px 5px black;
+	margin-bottom: 15px;
+	.link {
+		color: white;
+		font-variant-caps: all-petite-caps;
+		border: thin solid white;
+		border-radius: 5px;
+		padding: 2px 5px;
+	}
+}

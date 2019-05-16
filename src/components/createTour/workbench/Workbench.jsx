@@ -3,8 +3,8 @@ import { Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-import { updateUser } from '../../store';
-import Tour from '../tours/tour/Tour';
+import { updateUser } from '../../../store';
+import Tour from '../../tours/tour/Tour';
 
 class WorkBench extends Component {
 	state = {
@@ -46,9 +46,11 @@ class WorkBench extends Component {
 
 		return (
 			<div>
-				<h3>Tour Workbench</h3>
-				<Link to='/'>Home <br /></Link>
-				<Link to='/tour-info'>Create Tour</Link>
+				<header className="workbench-header">
+					<i className="fas fa-chevron-left" onClick={() => this.props.history.goBack()}></i>
+					<h2>Tour Workbench</h2>
+					<Link className='link' to='/tour-info'>New Tour</Link>
+				</header>
 				<div className="tours">
 					{tours}
 				</div>
