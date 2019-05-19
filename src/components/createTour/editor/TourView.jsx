@@ -16,7 +16,8 @@ class TourView extends Component {
 		showInfoWindow: false,
 		loadMap: false,
 		addMarkerLatLng: null,
-		prompt: 'Click map to add point of interest'
+		prompt: 'Click map to add point of interest',
+		legs: {}
 	}
 
 	async componentDidMount() {
@@ -69,9 +70,13 @@ class TourView extends Component {
 		this.setState({prompt: text})
 	}
 
+	setLegs = legs => {
+		this.setState({legs})
+	}
+
 	render() {
 		const { id } = this.props.match.params
-		const { user_id, name, id: tourId } = this.state.tour
+		const { user_id, name, id: tourId, lat, lng } = this.state.tour
 
 		return (
 			<div className="tour-view">
@@ -87,7 +92,7 @@ class TourView extends Component {
 						deleteContent={this.deleteContent} 
 					/>}
 
-					{!this.state.addMarkerLatLng && !this.state.showInfoWindow && this.props.login_id === user_id && <p className='prompt'>{this.state.prompt}</p>}
+					{!this.state.addMarkerLatLng && !this.state.showInfoWindow && !this.props.location.search && <p className='prompt'>{this.state.prompt}</p>}
 
 					{this.state.addMarkerLatLng && <Recorder 
 						addMarkerLatLng={this.state.addMarkerLatLng}
@@ -98,10 +103,20 @@ class TourView extends Component {
 
 				</header>
 
-				{this.state.loadMap && <div className='map'><ContentMap
+				{this.state.loadMap && !this.props.location.search && <div className='map'><ContentMap
 				id={id}
 				setMarker={this.setMarker}
 				mapClicked={this.mapClicked}
+				startLocation={{lat, lng}}
+				{...this.state}
+				/></div>}
+
+				{this.state.loadMap && this.props.location.search && <div className='map'><ContentMap
+				id={id}
+				setMarker={this.setMarker}
+				setLegs={this.setLegs}
+				search
+				startLocation={{lat: this.props.loc.lat, lng: this.props.loc.lng}}
 				{...this.state}
 				/></div>}
 
@@ -111,8 +126,8 @@ class TourView extends Component {
 }
 
 const mapStateToProps = state => {
-	const { login_id } = state
-	return { login_id }
+	const { login_id, loc } = state
+	return { login_id, loc }
 }
 
 export default connect(mapStateToProps)(withRouter(TourView))

@@ -1,31 +1,28 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import {Link, withRouter} from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 
 import LoginForm from './LoginRegisterForm'
 import Profile from './Profile'
-import {updateUser} from '../../store';
+import { updateUser } from '../../store';
 
 class Account extends Component {
-	
+
 	previousPageReturn = () => {
-		const {search} = this.props.history.location
+		const { search } = this.props.history.location
 		search && this.props.history.replace(`${search.slice(1)}`)
 	}
 
 	render() {
 		return (
 			<div>
-				<header>
-					<h3>Account</h3>
-					<Link to="/">
-						<i className="fa fa-times" aria-hidden="true"></i>
-					</Link>
-				
+				<header className='account-header'>
+					<i className="fas fa-chevron-left" onClick={() => this.props.history.goBack()}></i>
+					<h2>Account</h2>
 				</header>
 				{
 					this.props.username ? <Profile previousPageReturn={this.previousPageReturn} />
-						:	<LoginForm />
+						: <LoginForm />
 				}
 			</div>
 		)

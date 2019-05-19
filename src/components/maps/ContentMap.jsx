@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Marker, Map, InfoWindow, GoogleApiWrapper, Polyline } from 'google-maps-react';
 import pin from './map-pin-solid.svg';
+import profile from './user-circle-regular.svg'
 
 class ContentMap extends Component {
 	constructor(props) {
@@ -29,7 +30,7 @@ class ContentMap extends Component {
 	async getPolyline() {
 		const directionsService = await new this.props.google.maps.DirectionsService()
 			
-		const { lat, lng } = this.props.tour
+		const { lat, lng } = this.props.startLocation
 		const { lat: latd, lng: lngd } = this.props.content[this.props.content.length - 1]
 		const origin = await new this.props.google.maps.LatLng(lat, lng)
 		const destination = await new this.props.google.maps.LatLng(latd, lngd)
@@ -51,15 +52,21 @@ class ContentMap extends Component {
 		directionsService.route(request, (result, status) => {
 			console.log(status)
 			if (status === 'OK') {
+				console.log(result)
 				this.setState({ polyline: result.routes[0].overview_path })
+				this.props.search && this.setLegs(result.routes[0].legs)
 			} else if (status === 'ZERO_RESULTS') {
 				window.location.reload()
 			}
 		})
 	}
 
+	setLegs = legs => {
+		this.props.setLegs(legs)
+	}
+
 	mapClicked = (mapProps, map, clickEvent) => {
-		this.props.mapClicked(clickEvent.latLng)
+		if (this.props.mapClicked) this.props.mapClicked(clickEvent.latLng)
 	}
 
 	markerClick = (props, marker) => {
@@ -71,7 +78,7 @@ class ContentMap extends Component {
 	}
 
 	render() {
-		const { lat, lng } = this.props.tour
+		const { lat, lng } = this.props.startLocation
 		const {addMarkerLatLng} = this.props
 
 		if (this.props.content) {
@@ -105,13 +112,16 @@ class ContentMap extends Component {
 				onClick={this.mapClicked}
 				ref={this.mapRef}
 			>
-				{this.props.content[0] && <Marker
+				{this.props.content[0] && !this.props.search && <Marker
 					position={{ lat, lng }}
-					// icon={{
-					// 	url: mainMarker,
-					// 	anchor: new this.props.google.maps.Point(20,40),
-					// 	scaledSize: new this.props.google.maps.Size(40,40) 
-					// }}
+				/>}
+				{this.props.content[0] && this.props.search && <Marker
+					position={{ lat, lng }}
+					icon={{
+						url: profile,
+						anchor: new this.props.google.maps.Point(15,15),
+						scaledSize: new this.props.google.maps.Size(30,30) 
+					}}
 				/>}
 				
 

@@ -11,12 +11,20 @@ $green: #04381C;
 	color: #fff;
 }
 
+%flex-center {
+  display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
 @import './components/tours/toursHeader/toursHeader';
 @import './components/tours/tour/tour';
 @import './components/tours/localTours/localTours';
 @import './components/createTour/createTour';
 @import './components/createTour/editor/tourView';
 @import './components/createTour/workbench/workbench';
+@import './components/createTour/recorder/recorder';
+@import './components/account/account';
 
 body, h1, h2, h3, h4, h5, h6 {
   margin: 0;
@@ -28,13 +36,14 @@ button {
   background-color: $blue;
   color: #ffff;
   font-weight: bolder;
-  font-size: 14px;
+  font-size: 16px;
   border-radius: 5px;
   border: none;
   padding: 4px 5px;
   font-variant-caps: all-petite-caps;
   display: flex;
   align-items: center;
+  margin: 10px;
 }
 
 .tours {

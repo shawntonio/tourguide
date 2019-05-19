@@ -1,25 +1,39 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Axios from 'axios';
+import { connect } from 'react-redux';
+import { setLocation } from '../../../store';
 
 
-export default class Tour extends Component {
+class Tour extends Component {
 	state = {
-		content: []
+		content: [],
+		url: ''
 	}
 
 	componentDidMount() {
 		Axios.get(`/api/content/${this.props.tour.id}`)
 			.then(res => this.setState({ content: res.data }))
+		
+		Axios.get(`/user?id=${this.props.tour.user_id}`)
+		.then((res) => this.setState({url: res.data.profile_pic}))
 	}
 
 	deleteTour = (id) => {
 		this.state.content.forEach(content => {
 			Axios.delete(`/api/content/${content.id}`)
-			.catch(err => console.log(err))
+				.catch(err => console.log(err))
 		})
 		this.props.deleteTour(id)
 	}
+
+	// watchLocation = () => {
+	// 	const id = navigator.geolocation.watchPosition(pos => {
+	// 		console.log(pos)
+	// 		const location = {lat: pos.coords.latitude, lng: pos.coords.longitude}
+	// 		this.props.setLocation(location)
+	// 	})
+	// }
 
 	render() {
 		const { id, name, costs, type, duration, price, difficulty, live } = this.props.tour
@@ -27,8 +41,11 @@ export default class Tour extends Component {
 			<div className='tour'>
 				{live && this.props.deleteTour && <div className='live-tour'>live</div>}
 				<div className='tour-title'>
-					<h3>{name}</h3>
-					<p>by @(username)</p>
+					<img className='tourguide-pic' src={this.state.url} alt="profile"/>
+					<div className='tourguide-info'>
+						<h3>{name}</h3>
+						<p>by @(username)</p>
+					</div>
 				</div>
 				<div className="tour-specs">
 					{type === 'city' && <i className="fas fa-city"></i>}
@@ -57,13 +74,13 @@ export default class Tour extends Component {
 					</div>
 					}
 
-					{live && this.props.bought && <div>	
-						<Link to={`/tour-view/${id}`}>
-							<button>Start</button>
+					{live && this.props.bought && <div>
+						<Link to={`/tour-view/${id}?start`}>
+							<button onClick={this.watchLocation}>Start</button>
 						</Link>
 					</div>
 					}
-					
+
 					{this.props.deleteTour && <div>
 						<button onClick={() => this.deleteTour(id)}>Delete</button>
 						{!live &&
@@ -73,15 +90,21 @@ export default class Tour extends Component {
 						}
 						{!live &&
 							<Link to={`/publish/${id}`}>
-							<button>Publish</button>
-						</Link>
-						}	
+								<button>Publish</button>
+							</Link>
+						}
 					</div>}
 				</div>
 
-				
+
 
 			</div>
 		)
 	}
 }
+
+const mapDispatchToProps = {
+	setLocation
+}
+
+export default connect(null, mapDispatchToProps)(Tour)

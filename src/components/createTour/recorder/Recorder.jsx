@@ -6,20 +6,23 @@ export default class Recorder extends Component {
 	constructor(props) {
 		super(props)
 		this.audioRef = React.createRef();
+		this.soundBar = React.createRef();
 		this.state = {
 			mediaRecorder: null,
 			chunks: [],
-			blob: null		
+			blob: null,
+			recording: false
 		}
 	}
 	componentDidMount(){
+		const newDiv = document.createElement('div')
+
 		navigator.geolocation.getCurrentPosition(position => {
 			const {latitude: lat, longitude: lng} = position.coords
 			this.setState({location: {lat, lng}})
 		})
 
 		if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-			console.log('getUserMedia supported.');
 			navigator.mediaDevices.getUserMedia({audio: true})
 			.then(stream => {
 				const mediaRecorder = new MediaRecorder(stream)
@@ -29,8 +32,21 @@ export default class Recorder extends Component {
 				//listeners
 				mediaRecorder.ondataavailable = e => {
 					this.state.chunks.push(e.data)
+					const {size} = e.data
+					if (size > 860) {
+						this.soundBar.current.appendChild(newDiv)
+						newDiv.classList.add('sound3')
+					} else if (size > 820) {
+						this.soundBar.current.appendChild(newDiv)
+						newDiv.classList.add('sound2')
+					} else if (size > 780) {
+						this.soundBar.current.appendChild(newDiv)
+						newDiv.classList.add('sound1')
+					}
 				}
+					
 				mediaRecorder.onstop = e => {
+					console.log(this.state.chunks)
 					const {chunks} = this.state
 					this.setState({
 						blob: new Blob(chunks, { 'type' : chunks[0].type}),
@@ -80,15 +96,15 @@ export default class Recorder extends Component {
 
 	startRecording = () => {
 		const {mediaRecorder} = this.state
-		mediaRecorder.start()
-		console.log(mediaRecorder.state)
+		this.setState({recording: true})
+		mediaRecorder.start(100)
 	}
-
+	
 	stopRecording = () => {
+		this.setState({recording: false})
 		this.state.mediaRecorder.stop()
-		console.log(this.state.mediaRecorder.state)
 	}
-
+	
 	addPOI = () => {
 		const lat = this.props.addMarkerLatLng.lat()
 		const lng = this.props.addMarkerLatLng.lng()
@@ -97,17 +113,16 @@ export default class Recorder extends Component {
 
 	render() {
 		return(
-			<div>
+			<div className='recorder'>
 				<div className="recordButtons">
-					<i className="fas fa-dot-circle fa-2x" onClick={this.startRecording}></i>
-					<i className="fas fa-stop-circle fa-2x" onClick={this.stopRecording}></i>
+					<i className={`fas fa-dot-circle fa-2x ${this.state.recording ? 'hide' : null}`} onClick={this.startRecording}></i>
+					<i className={`fas fa-stop-circle fa-2x ${!this.state.recording ? 'hide' : null}`} onClick={this.stopRecording}></i>
 				</div>
-				{this.state.blob && <div>
-						<audio ref={this.audioRef} controls ></audio> 
-						<button onClick={this.addPOI}>Add Point of Interest</button>
-					</div>
-				}
-				
+				<div className="sound-bar" ref={this.soundBar}></div>
+				{this.state.blob && <div className='audio-controls'>
+					<audio ref={this.audioRef} controls ></audio> 
+					<button onClick={this.addPOI}>Add Point of Interest</button>
+				</div>}
 			</div>
 		)
 	}

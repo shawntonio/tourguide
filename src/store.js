@@ -30,10 +30,6 @@ export function setLocation(loc) {
 	}
 }
 
-export function getLocation() {
-	return 
-}
-
 const userReducer = (state = initialState, action) => {
 	const {type, payload} = action
 	switch(type) {

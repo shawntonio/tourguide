@@ -10,6 +10,7 @@ const AwsCtrl = require('./controllers/AwsCtrl')
 const ContentCtrl = require('./controllers/ContentCtrl')
 const StripeCtrl = require('./controllers/Stripe')
 const GoogleCtrl = require('./controllers/GoogleCtrl')
+const UserCtrl = require('./controllers/UserCtrl')
 
 const {SERVER_PORT, CONNECTION_STRING, SESSION_SECRET} = process.env
 
@@ -32,6 +33,9 @@ app.post('/auth/register', authCtrl.register)
 app.post('/auth/login', authCtrl.login)
 app.get('/auth/user', authCtrl.getUser)
 app.get('/auth/logout', authCtrl.logout)
+
+app.put('/user', UserCtrl.updateUser)
+app.get('/user', UserCtrl.getUserInfo)
 
 app.post('/api/tours', toursCtrl.createTour)
 app.get('/api/tours/:id', toursCtrl.getMyTours)

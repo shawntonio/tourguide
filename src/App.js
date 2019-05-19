@@ -3,7 +3,7 @@ import './App.scss';
 import { HashRouter, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Axios from 'axios';
-import {StripeProvider} from 'react-stripe-elements';
+import { StripeProvider } from 'react-stripe-elements';
 
 import { updateUser, setLocation } from './store';
 import Account from './components/account/Account';
@@ -22,12 +22,25 @@ class App extends Component {
       this.props.updateUser(login_id, username)
     }).catch(err => console.log(err))
 
-    navigator.geolocation.getCurrentPosition(position => {
-			this.props.setLocation({
-        lat: position.coords.latitude, 
-        lng: position.coords.longitude
-      })
-    }, err => console.log(err))
+    const options = {
+      enableHighAccuracy: true,
+      maximumAge: 30000,
+      timeout: 27000
+    }
+
+
+    if ("geolocation" in navigator) {
+      
+      navigator.geolocation.getCurrentPosition(position => {
+        this.props.setLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        })
+      }, err => console.log(`${err.code}`), options)
+    } else {
+      alert('geolocaiton not available')
+    }
+
   }
 
   render() {
@@ -38,7 +51,7 @@ class App extends Component {
         <HashRouter>
           <Switch>
             <Route exact path='/' component={LocalTours} />
-						<Route path='/buy/:id' component={Buy} />
+            <Route path='/buy/:id' component={Buy} />
             <Route path='/my-tours' component={MyTours} />
 
             <Route path='/account' component={Account} />
