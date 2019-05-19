@@ -20,12 +20,6 @@
 
 .tour-view-title {
 	@extend %green-header;
-	// background-color: $green;
-	// padding: 10px;
-	// display: flex;
-	// justify-content: space-between;
-	// align-items: center;
-	// color: #fff;
 }
 
 .map-search {
@@ -39,4 +33,15 @@
 .prompt {
 	text-align: center;
 	color: gray;
+}
+
+.content-edit {
+	display: flex;
+	justify-content: center;
+}
+
+.audio-info-window {
+	width: 200px;
+	background-color: #fff;
+	color: #fff;	
 }

@@ -4,5 +4,6 @@ set type = ${type},
 		costs = ${costs},
 		price = ${price},
 		difficulty = ${difficulty},
-		live = true
+		live = ${live},
+		cover_photo = ${cover_photo}
 where id = ${id};

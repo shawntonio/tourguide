@@ -31,9 +31,9 @@ module.exports = {
 	updateTour(req, res) {
 		const db = req.app.get('db')
 		const id = +req.params.id
-		const {type, duration, costs, price, difficulty} = req.body
+		const {type, duration, costs, price, difficulty, cover_photo, live} = req.body
 
-		db.updateTour({type, duration, costs, price, difficulty, id})
+		db.updateTour({type, duration, costs, price, difficulty, id, cover_photo, live})
 		.then(() => res.sendStatus(200))
 		.catch(err => console.log(err))
 	},

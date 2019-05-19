@@ -5,8 +5,8 @@ import { withRouter } from 'react-router-dom';
 import Axios from 'axios';
 
 
-import PaymentForm from './PaymentForm';
-import { updateUser } from '../../store';
+import PaymentForm from '../PaymentForm';
+import { updateUser } from '../../../store';
 
 class Buy extends Component {
 
@@ -39,7 +39,10 @@ class Buy extends Component {
 		const { name } = this.state.tour
 		return (
 			<div>
-				<h1>{name}</h1>
+				<header className="buy-header">
+					<i className="fas fa-chevron-left" onClick={() => this.props.history.goBack()}></i>
+					<h2>{name}</h2>
+				</header>
 				<Elements>
 					<PaymentForm tour={this.state.tour} user_id={this.props.login_id} />
 				</Elements>

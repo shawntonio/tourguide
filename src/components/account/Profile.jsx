@@ -74,7 +74,9 @@ class Profile extends Component {
 					<div className='profile'>
 						{profile_pic ? <img className='profile-pic' src={profile_pic} alt="profile_pic" />
 							: <div>
-								<img className='profile-pic' src={this.state.uploadImg} alt='none' />
+								<div className='profile-pic'>
+									<img src={this.state.uploadImg} alt='none' />
+								</div>
 								<input ref={this.imgInput} accept="image/*" style={{display: 'none'}} type="file" onChange={() => this.getSig(this.imgInput.current.files[0])} />
 								<p onClick={this.clickImgInput}>Add Picture</p>
 							</div>}

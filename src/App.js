@@ -12,7 +12,7 @@ import CreateTour from './components/createTour/CreateTour';
 import TourView from './components/createTour/editor/TourView';
 import Publish from './components/createTour/Publish';
 import LocalTours from './components/tours/localTours/LocalTours';
-import Buy from './components/tours/Buy';
+import Buy from './components/tours/buy/Buy';
 import MyTours from './components/tours/MyTours';
 
 class App extends Component {
@@ -23,7 +23,7 @@ class App extends Component {
     }).catch(err => console.log(err))
 
     const options = {
-      enableHighAccuracy: true,
+      enableHighAccuracy: false,
       maximumAge: 30000,
       timeout: 27000
     }

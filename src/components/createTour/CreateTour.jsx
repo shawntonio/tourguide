@@ -47,20 +47,25 @@ class TourInfo extends Component {
 		const { name } = this.state
 		return (
 			<div>
-				<h1>Create a Tour</h1>
+				<header className='create-tour-header'>
+					<i className="fas fa-chevron-left" onClick={() => this.props.history.goBack()}></i>
+					<h2>Create a Tour</h2>
+				</header>
 				<form onSubmit={this.createTourHandler} className='create-tour-form'>
 					<div className="inputs">
 						<label>Tour Name:</label>
 						<input name='name' value={name} type="text" onChange={this.inputHandler} />
 					</div>
 
-					<label htmlFor="">Choose Starting Location</label>
+					<div className='choose-create'>
+						<label htmlFor="">Choose Starting Location</label>
 
-					<button>Create Tour</button>
+						<button>Create Tour</button>
+					</div>
 				</form>
 
 				{this.props.loc.lat && <ContentMap 
-					tour={{...this.props.loc}} 
+					startLocation={{...this.props.loc}} 
 					activeMarker={{}} 
 					content={[]}
 					addMarkerLatLng={this.state.addMarkerLatLng} 

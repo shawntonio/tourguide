@@ -24,8 +24,8 @@ export default class Publish extends Component {
 
 	submitFormHandle = (e) => {
 		e.preventDefault()
-		const {type, duration, difficulty, costs, price} = this.state
-		Axios.put(`/api/tour/${this.props.match.params.id}`, {type, duration, costs, price, difficulty})
+		const {type, duration, difficulty, costs, price, tour} = this.state
+		Axios.put(`/api/tour/${this.props.match.params.id}`, {type, duration, costs, price, difficulty, live: true, cover_photo: tour.cover_photo})
 		.then(() => {
 			this.props.history.push('/workbench')
 		}).catch(err => console.log(err))

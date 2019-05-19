@@ -29,12 +29,12 @@ class PaymentForm extends Component {
 	render() {
 
 		return (
-			<>
+			<div className='payment-form'>
 				{this.state.complete && <h2>Payment Complete</h2>}
-				<h3>Enter card info</h3>
-				<CardElement />
+				<h3>Enter Payment Information</h3>
+				<CardElement className='card-input' />
 				<button onClick={() => this.submit()}>Submit</button>
-			</>
+			</div>
 		)
 	}
 }

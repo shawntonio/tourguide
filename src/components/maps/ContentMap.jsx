@@ -142,7 +142,7 @@ class ContentMap extends Component {
 					visible={this.props.showInfoWindow}
 					onClose={this.clearActiveMarker}
 				>
-					<audio controls src={this.props.activeMarker.name}></audio>
+					<audio className='audio-info-window' controls src={this.props.activeMarker.name}></audio>
 				</InfoWindow>
 
 				<Polyline

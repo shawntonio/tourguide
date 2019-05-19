@@ -1,3 +1,16 @@
+.create-tour-header {
+	@extend %green-header
+}
+
 .create_tour_form {
 	margin: 10px;
+}
+
+.choose-create {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	label {
+		color: $green;
+	}
 }

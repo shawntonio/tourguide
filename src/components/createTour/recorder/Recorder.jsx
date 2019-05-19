@@ -15,8 +15,6 @@ export default class Recorder extends Component {
 		}
 	}
 	componentDidMount(){
-		const newDiv = document.createElement('div')
-
 		navigator.geolocation.getCurrentPosition(position => {
 			const {latitude: lat, longitude: lng} = position.coords
 			this.setState({location: {lat, lng}})
@@ -32,21 +30,9 @@ export default class Recorder extends Component {
 				//listeners
 				mediaRecorder.ondataavailable = e => {
 					this.state.chunks.push(e.data)
-					const {size} = e.data
-					if (size > 860) {
-						this.soundBar.current.appendChild(newDiv)
-						newDiv.classList.add('sound3')
-					} else if (size > 820) {
-						this.soundBar.current.appendChild(newDiv)
-						newDiv.classList.add('sound2')
-					} else if (size > 780) {
-						this.soundBar.current.appendChild(newDiv)
-						newDiv.classList.add('sound1')
-					}
 				}
 					
 				mediaRecorder.onstop = e => {
-					console.log(this.state.chunks)
 					const {chunks} = this.state
 					this.setState({
 						blob: new Blob(chunks, { 'type' : chunks[0].type}),
@@ -115,10 +101,14 @@ export default class Recorder extends Component {
 		return(
 			<div className='recorder'>
 				<div className="recordButtons">
-					<i className={`fas fa-dot-circle fa-2x ${this.state.recording ? 'hide' : null}`} onClick={this.startRecording}></i>
-					<i className={`fas fa-stop-circle fa-2x ${!this.state.recording ? 'hide' : null}`} onClick={this.stopRecording}></i>
+					<div className={`${this.state.recording ? 'hide' : null}`} ref={this.soundBar}>
+						<i className={`fas fa-dot-circle fa-2x ${this.state.recording ? 'hide' : null}`} onClick={this.startRecording}></i>
+					</div>
+					<div className={`recording ${!this.state.recording ? 'hide' : null}`} ref={this.soundBar}>
+						<i className={`fas fa-stop-circle fa-2x ${!this.state.recording ? 'hide' : null}`} onClick={this.stopRecording}></i>
+					</div>
 				</div>
-				<div className="sound-bar" ref={this.soundBar}></div>
+				{/* <div className="sound-bar" ref={this.soundBar}></div> */}
 				{this.state.blob && <div className='audio-controls'>
 					<audio ref={this.audioRef} controls ></audio> 
 					<button onClick={this.addPOI}>Add Point of Interest</button>

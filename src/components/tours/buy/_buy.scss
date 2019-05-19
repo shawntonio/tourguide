@@ -1,0 +1,22 @@
+.buy-header {
+	@extend %green-header;
+	margin-bottom: 100px;
+}
+
+.payment-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	h3 {
+		text-align: center;
+		margin-bottom: 20px;
+	}
+}
+
+.card-input {
+	border: thin solid ;
+	width: 90%;
+	margin-bottom: 20px;
+	padding: 10px;
+	border-radius: 50px;	
+}

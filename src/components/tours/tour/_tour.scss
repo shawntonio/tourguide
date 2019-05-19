@@ -27,8 +27,6 @@
 		width: 60px;
 		border-radius: 50%;
 	}
-	// .tourguide-info {
-	// }
 }
 
 .tour-specs {
@@ -41,6 +39,7 @@
 .tour-spec {
 	font-weight: bolder;
 	font-variant-caps: small-caps;
+	margin: 5px;
 }
 
 .tour-buttons {
@@ -58,5 +57,11 @@
 	text-align: center;
 	border-top-left-radius: 10px;
 	border-top-right-radius: 10px;
+}
+
+.cover-photo {
+	width: 100%;
+	max-height: 300px;
+	margin-top: 10px;
 }
 

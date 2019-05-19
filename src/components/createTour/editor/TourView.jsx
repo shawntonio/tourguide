@@ -85,9 +85,9 @@ class TourView extends Component {
 					<div className="tour-view-title" >
 						<i className="fas fa-chevron-left" onClick={() => this.props.history.goBack()}></i>
 						<h2>{name}</h2>
-						<input type="text" name="search" id="" placeholder="search" className="map-search" />
+						{!this.props.location.search && <input type="text" name="search" id="" placeholder="search" className="map-search" />}
 					</div>
-					{this.state.showInfoWindow && this.props.login_id === user_id && <EditorHeader 
+					{this.state.showInfoWindow && this.props.login_id === user_id && !this.props.location.search && <EditorHeader 
 						activeMarker={this.state.activeMarker} 
 						deleteContent={this.deleteContent} 
 					/>}

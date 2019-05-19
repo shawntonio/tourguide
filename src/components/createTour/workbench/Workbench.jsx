@@ -41,7 +41,7 @@ class WorkBench extends Component {
 
 	render() {
 		const tours = this.state.tours.map(tour => (
-			<Tour key={tour.id} tour={tour} deleteTour={this.deleteTour} />
+			<Tour key={tour.id} tour={tour} deleteTour={this.deleteTour} getTours={this.getTours} />
 		))
 
 		return (
