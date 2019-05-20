@@ -24,7 +24,6 @@ class LocalTours extends Component {
 
 	componentDidUpdate(prevProps) {
 		if (this.props.loc !== prevProps.loc) {
-			console.log(this.props.loc)
 			Axios.get(`/api/tours?lat=${this.props.loc.lat}&lng=${this.props.loc.lng}`)
 				.then(res => {
 					this.setState({ tours: res.data })

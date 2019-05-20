@@ -47,7 +47,7 @@ class WorkBench extends Component {
 		return (
 			<div>
 				<header className="workbench-header">
-					<i className="fas fa-chevron-left" onClick={() => this.props.history.goBack()}></i>
+					<i className="fas fa-chevron-left" onClick={() => this.props.history.push('/')}></i>
 					<h2>Tour Workbench</h2>
 					<Link className='link' to='/tour-info'>New Tour</Link>
 				</header>

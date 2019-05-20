@@ -10,7 +10,7 @@ import Account from './components/account/Account';
 import Workbench from './components/createTour/workbench/Workbench';
 import CreateTour from './components/createTour/CreateTour';
 import TourView from './components/createTour/editor/TourView';
-import Publish from './components/createTour/Publish';
+import Publish from './components/createTour/publish/Publish';
 import LocalTours from './components/tours/localTours/LocalTours';
 import Buy from './components/tours/buy/Buy';
 import MyTours from './components/tours/MyTours';

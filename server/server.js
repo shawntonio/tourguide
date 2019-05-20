@@ -3,6 +3,8 @@ const express = require('express')
 const app = express()
 const massive = require('massive')
 const session = require('express-session')
+const path = require('path'); 
+
 
 const authCtrl = require('./controllers/auth')
 const toursCtrl = require('./controllers/ToursCtrl')
@@ -14,6 +16,7 @@ const UserCtrl = require('./controllers/UserCtrl')
 
 const {SERVER_PORT, CONNECTION_STRING, SESSION_SECRET} = process.env
 
+app.use( express.static( `${__dirname}/../build` ) );
 app.use(express.json())
 app.use(session({
 	secret: SESSION_SECRET,
@@ -56,3 +59,7 @@ app.delete('/api/content/:id', AwsCtrl.deleteObject)
 app.post('/google/route', GoogleCtrl.getDirections)
 
 app.post('/stripe/charge', StripeCtrl.charge)
+
+app.get('*', (req, res)=>{
+	res.sendFile(path.join(__dirname, '../build/index.html'));
+});

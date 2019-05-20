@@ -6,7 +6,7 @@ export default class Publish extends Component {
 		costs: 0,
 		price: 0,
 		type: '',
-		duration: '',
+		duration: 0,
 		difficulty: '',
 		tour: {}
 	}
@@ -37,8 +37,11 @@ export default class Publish extends Component {
 
 		return (
 			<div>
-				<h3>{name}</h3>
-				<form onSubmit={this.submitFormHandle}>
+				<div className='publish-header'>
+					<i className="fas fa-chevron-left" onClick={() => this.props.history.goBack()}></i>
+					<h2>{name}</h2>
+				</div>
+				<form className='publish-form' onSubmit={this.submitFormHandle}>
 					<div className="inputs">
 						<label>Type of Tour</label>
 						<select name="type" value={type} onChange={this.inputHandler} >
@@ -47,6 +50,16 @@ export default class Publish extends Component {
 							<option value="hike">Hike</option>
 							<option value="scenic drive">Scenic Drive</option>
 							<option value="indoors">Indoors</option>
+						</select>
+					</div>
+
+					<div className="inputs">
+						<label>Difficulty</label>
+						<select name="difficulty" value={difficulty} onChange={this.inputHandler}>
+							<option value="choose">choose</option>
+							<option value="easy">Easy</option>
+							<option value="normal">Normal</option>
+							<option value="hard">Hard</option>
 						</select>
 					</div>
 
@@ -65,15 +78,6 @@ export default class Publish extends Component {
 						<input name='price' value={price} type="number" onChange={this.inputHandler} />
 					</div>
 
-					<div className="inputs">
-						<label>Difficulty</label>
-						<select name="difficulty" value={difficulty} onChange={this.inputHandler}>
-							<option value="choose">choose</option>
-							<option value="easy">Easy</option>
-							<option value="normal">Normal</option>
-							<option value="hard">Hard</option>
-						</select>
-					</div>
 
 					<button>Publish</button>
 				</form>

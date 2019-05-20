@@ -17,7 +17,7 @@ class Account extends Component {
 		return (
 			<div>
 				<header className='account-header'>
-					<i className="fas fa-chevron-left" onClick={() => this.props.history.goBack()}></i>
+					<i className="fas fa-chevron-left" onClick={() => this.props.history.push('/')}></i>
 					<h2>Account</h2>
 				</header>
 				{
