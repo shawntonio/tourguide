@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
 import { connect } from 'react-redux';
+import ReactLoading from 'react-loading';
 
 import Tour from '../tour/Tour';
 import ToursHeader from '../toursHeader/ToursHeader';
@@ -8,15 +9,18 @@ import { setLocation } from '../../../store';
 
 class LocalTours extends Component {
 	state = {
-		tours: []
+		tours: [],
+		loading: false
 	}
 
 	componentDidMount() {
-		
+		if (!this.state.tours[0]) {
+			this.setState({loading: true})
+		}
 		if (this.props.loc.lat) {
 			Axios.get(`/api/tours?lat=${this.props.loc.lat}&lng=${this.props.loc.lng}`)
 				.then(res => {
-					this.setState({ tours: res.data })
+					this.setState({ loading: false, tours: res.data })
 				})
 		}
 
@@ -26,7 +30,7 @@ class LocalTours extends Component {
 		if (this.props.loc !== prevProps.loc) {
 			Axios.get(`/api/tours?lat=${this.props.loc.lat}&lng=${this.props.loc.lng}`)
 				.then(res => {
-					this.setState({ tours: res.data })
+					this.setState({ loading: false, tours: res.data })
 				})
 		}
 	}
@@ -40,6 +44,7 @@ class LocalTours extends Component {
 				<ToursHeader />
 				<div className='tours'>
 					{tours}
+					{this.state.loading && <ReactLoading id='loader' type={'spokes'} color={'#12135A'} />}
 				</div>
 			</div>
 		)
