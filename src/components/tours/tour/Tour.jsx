@@ -13,22 +13,29 @@ class Tour extends Component {
 		this.photoInput = React.createRef()
 		this.state = {
 			content: [],
-			url: ''
+			url: '',
+			username: ''
 		}
 	}
 
 	componentDidMount() {
 		Axios.get(`/api/content/${this.props.tour.id}`)
 			.then(res => this.setState({ content: res.data }))
+			.catch(err => console.log(err))
 		
 		Axios.get(`/user?id=${this.props.tour.user_id}`)
-		.then((res) => this.setState({url: res.data.profile_pic}))
+			.then((res) => this.setState({ url: res.data.profile_pic }))
+			.catch(err => console.log(err))
+
+		Axios.get(`/user/${this.props.tour.user_id}`)
+			.then(res => this.setState({ username: res.data.username }))
+			.catch(err => console.log(err))
 	}
 
 	deleteTour = (id) => {
-			if (this.state.content[0]) {
-				alert('You still have audio content in this tour. If you want to delete this tour, delete the all content first.')
-			} else this.props.deleteTour(id)
+		if (this.state.content[0]) {
+			alert('You still have audio content in this tour. If you want to delete this tour, delete the all content first.')
+		} else this.props.deleteTour(id)
 	}
 
 	getSig = (file) => {
@@ -41,7 +48,7 @@ class Tour extends Component {
 			}
 		}).then(res => {
 			const { signedRequest, url } = res.data
-			this.setState({uploadImg: url})
+			this.setState({ uploadImg: url })
 			this.uploadFile(file, signedRequest, url)
 		})
 	}
@@ -54,9 +61,9 @@ class Tour extends Component {
 		}
 
 		Axios.put(signedRequest, file, options).then(() => {
-			Axios.put(`/api/tour/${this.props.tour.id}`, {...this.props.tour, cover_photo: url})
-			.then(() => this.props.getTours())
-			.catch(err => console.log(err))
+			Axios.put(`/api/tour/${this.props.tour.id}`, { ...this.props.tour, cover_photo: url })
+				.then(() => this.props.getTours())
+				.catch(err => console.log(err))
 		})
 	}
 
@@ -70,10 +77,10 @@ class Tour extends Component {
 			<div className='tour'>
 				{live && this.props.deleteTour && <div className='live-tour'>live</div>}
 				<div className='tour-title'>
-					<img className='tourguide-pic' src={this.state.url} alt="profile"/>
+					<img className='tourguide-pic' src={this.state.url} alt="profile" />
 					<div className='tourguide-info'>
 						<h3>{name}</h3>
-						<p>by @(username)</p>
+						<p>by @{this.state.username}</p>
 					</div>
 				</div>
 
@@ -81,7 +88,7 @@ class Tour extends Component {
 				{!cover_photo && live && <img className="cover-photo" src='https://bigriverequipment.com/wp-content/uploads/2017/10/no-photo-available.png' alt='none' />}
 				{!cover_photo && this.props.deleteTour &&
 					<div>
-						<input ref={this.photoInput} accept="image/*" style={{display: 'none'}} type="file" onChange={() => this.getSig(this.photoInput.current.files[0])} />
+						<input ref={this.photoInput} accept="image/*" style={{ display: 'none' }} type="file" onChange={() => this.getSig(this.photoInput.current.files[0])} />
 						<p onClick={this.clickImgInput}>Add cover photo</p>
 					</div>
 				}

@@ -14,5 +14,14 @@ module.exports = {
 
 		db.getUserInfo({id}).then(user => res.status(200).send(user[0]))
 		.catch(err => console.log(err))
+	},
+
+	getUsernameByTour (req, res) {
+		const db = req.app.get('db')
+		const {id} = req.params
+		
+		db.getUsernameByTour({id}).then(username => {
+			res.status(200).send(username[0])
+		}).catch(err => console.log(err))
 	}
 }

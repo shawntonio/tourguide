@@ -38,6 +38,7 @@ app.get('/auth/logout', authCtrl.logout)
 
 app.put('/user', UserCtrl.updateUser)
 app.get('/user', UserCtrl.getUserInfo)
+app.get('/user/:id', UserCtrl.getUsernameByTour)
 
 app.post('/api/tours', toursCtrl.createTour)
 app.get('/api/tours/:id', toursCtrl.getMyTours)
