@@ -51,6 +51,7 @@ class TourInfo extends Component {
 					<i className="fas fa-chevron-left" onClick={() => this.props.history.goBack()}></i>
 					<h2>Create a Tour</h2>
 				</header>
+				
 				<form onSubmit={this.createTourHandler} className='create-tour-form'>
 					<div className="inputs" id='tour-name-input'>
 						<label>Tour Name:</label>
@@ -66,7 +67,7 @@ class TourInfo extends Component {
 					</div>
 				</form>
 
-				{this.props.loc.lat && <ContentMap 
+				{this.props.loc.lat && this.props.username && <ContentMap 
 					startLocation={{...this.props.loc}} 
 					activeMarker={{}} 
 					content={[]}

@@ -6,23 +6,27 @@ import { connect } from 'react-redux'
 import ContentMap from '../../maps/ContentMap'
 import EditorHeader from './EditorHeader'
 import Recorder from '../recorder/Recorder'
-import {setLocation} from '../../../store'
+import { setLocation } from '../../../store'
 
 class TourView extends Component {
 
-	state = {
-		tour: {},
-		content: [],
-		activeMarker: {},
-		showInfoWindow: false,
-		loadMap: false,
-		addMarkerLatLng: null,
-		prompt: 'Click map to add point of interest',
-		legs: null,
-		watchId: null,
-		directions: '',
-		legIteration: 0,
-		stepIteration: 0
+	constructor() {
+		super()
+		this.dirRef = React.createRef()
+		this.state = {
+			tour: {},
+			content: [],
+			activeMarker: {},
+			showInfoWindow: false,
+			loadMap: false,
+			addMarkerLatLng: null,
+			prompt: 'Click map to add point of interest',
+			legs: null,
+			watchId: null,
+			directions: '',
+			legIteration: 0,
+			stepIteration: 0
+		}
 	}
 
 	async componentDidMount() {
@@ -35,26 +39,49 @@ class TourView extends Component {
 		this.getContent()
 
 		const watchId = navigator.geolocation.watchPosition(this.geoSuccess, () => alert('position not available'), {
-			enableHighAccuracy: true, 
-			maximumAge        : 30000, 
-			timeout           : 27000
+			enableHighAccuracy: true,
+			maximumAge: 30000,
+			timeout: 27000
 		})
 
-		this.setState({watchId})
+		this.setState({ watchId })
 	}
 
-	componentWillUnmount(){
+	componentWillUnmount() {
 		navigator.geolocation.clearWatch(this.state.watchId)
 	}
 
-	geoSuccess = position => {
-		const {legIteration, stepIteration, legs} = this.state
-		const location = {lat: position.coords.latitude, lng: position.coords.longitude}
-		this.props.setLocation(location)
-		if (legs) this.setState({directions: legs[legIteration].steps[stepIteration].instructions})
+	componentDidUpdate(prevProps) {
+		if (prevProps.loc.lat !== this.props.loc.lat) {
+			const { legIteration, stepIteration, legs } = this.state
+			const location = { lat: this.props.loc.lat, lng: this.props.loc.lng }
+			let currentStep
+			if (legs) { 
+				currentStep =	legs[legIteration].steps[stepIteration]
+				console.log(currentStep.end_point.lat(), currentStep.end_point.lng())
+			}
+			if (legs && location.lat === currentStep.end_point.lat() && location.lng === currentStep.end_point.lng()) {
+				if (legs.steps.length - 1 === stepIteration && legs.length - 1 === legIteration) {
+					this.setState({directions: 'Woo Hoo! You finished the tour'})
+				} else if (legs.steps.length - 1 === stepIteration) {
+					this.setState({legIteration: legIteration + 1})
+				} else {
+					this.setState({stepIteration: stepIteration + 1})
+				}
+			}
+		}
 	}
 
-	getContent= () => {
+	geoSuccess = position => {
+		const { legIteration, stepIteration, legs } = this.state
+		const location = { lat: position.coords.latitude, lng: position.coords.longitude }
+		let currentStep
+		if (legs) currentStep = legs[legIteration].steps[stepIteration]
+		this.props.setLocation(location)
+		if (legs) this.setState({ directions: currentStep.instructions })
+	}
+
+	getContent = () => {
 		const { id } = this.props.match.params
 		axios.get(`/api/content/${id}`).then(res => {
 			this.setState({
@@ -90,11 +117,11 @@ class TourView extends Component {
 	}
 
 	changePrompt = text => {
-		this.setState({prompt: text})
+		this.setState({ prompt: text })
 	}
 
 	setLegs = legs => {
-		this.setState({legs})
+		this.setState({ legs })
 	}
 
 	render() {
@@ -113,38 +140,38 @@ class TourView extends Component {
 						<h2>{name}</h2>
 						{!this.props.location.search && <input type="text" name="search" id="" placeholder="search" className="map-search" />}
 					</div>
-					{this.state.showInfoWindow && this.props.login_id === user_id && !this.props.location.search && <EditorHeader 
-						activeMarker={this.state.activeMarker} 
-						deleteContent={this.deleteContent} 
+					{this.state.showInfoWindow && this.props.login_id === user_id && !this.props.location.search && <EditorHeader
+						activeMarker={this.state.activeMarker}
+						deleteContent={this.deleteContent}
 					/>}
 
 					{!this.state.addMarkerLatLng && !this.state.showInfoWindow && !this.props.location.search && <p className='prompt'>{this.state.prompt}</p>}
-					{this.props.location.search && this.state.directions}
+					{this.props.location.search && <p dangerouslySetInnerHTML={{ __html: this.state.directions }} className='directions'></p>}
 
-					{this.state.addMarkerLatLng && <Recorder 
+					{this.state.addMarkerLatLng && <Recorder
 						addMarkerLatLng={this.state.addMarkerLatLng}
-						tourId={tourId} 
+						tourId={tourId}
 						clearAddMarker={this.clearAddMarker}
-						changePrompt={this.changePrompt} 
-					 />}
+						changePrompt={this.changePrompt}
+					/>}
 
 				</header>
 
 				{this.state.loadMap && !this.props.location.search && <div className='map'><ContentMap
-				id={id}
-				setMarker={this.setMarker}
-				mapClicked={this.mapClicked}
-				startLocation={{lat, lng}}
-				{...this.state}
+					id={id}
+					setMarker={this.setMarker}
+					mapClicked={this.mapClicked}
+					startLocation={{ lat, lng }}
+					{...this.state}
 				/></div>}
 
 				{this.state.loadMap && this.props.location.search && <div className='map'><ContentMap
-				id={id}
-				setMarker={this.setMarker}
-				setLegs={this.setLegs}
-				search
-				startLocation={{lat: this.props.loc.lat, lng: this.props.loc.lng}}
-				{...this.state}
+					id={id}
+					setMarker={this.setMarker}
+					setLegs={this.setLegs}
+					search
+					startLocation={{ lat: this.props.loc.lat, lng: this.props.loc.lng }}
+					{...this.state}
 				/></div>}
 
 			</div>

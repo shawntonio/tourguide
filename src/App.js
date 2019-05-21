@@ -23,8 +23,6 @@ class App extends Component {
     }).catch(err => console.log(err))
 
     const options = {
-      enableHighAccuracy: false,
-      maximumAge: 30000,
       timeout: 27000
     }
 

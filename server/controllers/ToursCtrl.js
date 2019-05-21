@@ -57,7 +57,7 @@ module.exports = {
 
 		db.deleteTour({id})
 		.then(() => res.sendStatus(200))
-		.catch(err => console.log(err))
+		.catch(err => res.sendStatus(500))
 	},
 
 	getPaidTours(req, res) {

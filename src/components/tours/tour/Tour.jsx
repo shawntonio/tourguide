@@ -26,11 +26,9 @@ class Tour extends Component {
 	}
 
 	deleteTour = (id) => {
-		this.state.content.forEach(content => {
-			Axios.delete(`/api/content/${content.id}`)
-				.catch(err => console.log(err))
-		})
-		this.props.deleteTour(id)
+			if (this.state.content[0]) {
+				alert('You still have audio content in this tour. If you want to delete this tour, delete the all content first.')
+			} else this.props.deleteTour(id)
 	}
 
 	getSig = (file) => {

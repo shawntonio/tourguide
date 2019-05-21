@@ -12,18 +12,8 @@ class WorkBench extends Component {
 	}
 
 	async componentDidMount() {
-		await axios.get('/auth/user').then(res => {
-			const { login_id, username } = res.data
-			if (!login_id) {
-				this.props.history.push(`/account?${this.props.history.location.pathname}`)
-			} else {
-				this.props.updateUser(login_id, username)
-			}
-		}).catch(err => console.log(err))
-
-		if (this.props.login_id) {
-			this.getTours()
-		}
+		!this.props.login_id ? this.props.history.replace(`/account?${this.props.history.location.pathname}`)
+		: this.getTours()
 	}
 
 	getTours = () => {
@@ -37,6 +27,7 @@ class WorkBench extends Component {
 	deleteTour = (id) => {
 		axios.delete(`/api/tour/${id}`)
 			.then(() => this.getTours())
+			.catch(err => alert('Someone had paid for this tour. You cannot delete it.'))
 	}
 
 	render() {
