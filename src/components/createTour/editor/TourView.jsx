@@ -25,7 +25,8 @@ class TourView extends Component {
 			watchId: null,
 			directions: '',
 			legIteration: 0,
-			stepIteration: 0
+			stepIteration: 0,
+			myLocation: null
 		}
 	}
 
@@ -124,6 +125,10 @@ class TourView extends Component {
 		this.setState({ legs })
 	}
 
+	findMyLocation = () => {
+		this.setState({myLocation: this.props.loc})
+	}
+
 	render() {
 		console.log(this.state.legs)
 
@@ -163,6 +168,7 @@ class TourView extends Component {
 					mapClicked={this.mapClicked}
 					startLocation={{ lat, lng }}
 					{...this.state}
+					myLocation={this.state.myLocation}
 				/></div>}
 
 				{this.state.loadMap && this.props.location.search && <div className='map'><ContentMap
@@ -173,6 +179,8 @@ class TourView extends Component {
 					startLocation={{ lat: this.props.loc.lat, lng: this.props.loc.lng }}
 					{...this.state}
 				/></div>}
+
+				<i onClick={this.findMyLocation} id='find-my-location' className="fas fa-crosshairs fa-2x"></i>
 
 			</div>
 		)

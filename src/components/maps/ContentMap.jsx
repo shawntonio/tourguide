@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Marker, Map, InfoWindow, GoogleApiWrapper, Polyline } from 'google-maps-react';
 import pin from './map-pin-solid.svg';
-import profile from './user-circle-regular.svg'
+import profile from './user-circle-regular.svg';
+import crossHair from './crosshairs-solid.svg';
 
 class ContentMap extends Component {
 	constructor(props) {
@@ -105,6 +106,7 @@ class ContentMap extends Component {
 				zoom={17}
 				style={{ height: '100%', width: '100%' }}
 				initialCenter={{ lat, lng }}
+				center={{}}
 				disableDefaultUI={true}
 				onClick={this.mapClicked}
 				ref={this.mapRef}
@@ -129,6 +131,16 @@ class ContentMap extends Component {
 						url: pin,
 						anchor: new this.props.google.maps.Point(20,40),
 						scaledSize: new this.props.google.maps.Size(40,40) 
+					}}
+				/> }
+
+				{this.props.myLocation && <Marker 
+					name={'addContent'}
+					position={{ lat: this.props.myLocation.lat, lng: this.props.myLocation.lng}}
+					icon={{
+						url: crossHair,
+						anchor: new this.props.google.maps.Point(10,10),
+						scaledSize: new this.props.google.maps.Size(20,20) 
 					}}
 				/> }
 

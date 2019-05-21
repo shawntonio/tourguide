@@ -49,3 +49,10 @@
 .directions {
 	text-align: center;
 }
+
+#find-my-location {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	color: $yellow;
+}
