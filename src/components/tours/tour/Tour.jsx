@@ -80,6 +80,7 @@ class Tour extends Component {
 				</div>
 
 				{cover_photo && <img className="cover-photo" src={cover_photo} alt='cover' />}
+				{!cover_photo && live && <img className="cover-photo" src='https://bigriverequipment.com/wp-content/uploads/2017/10/no-photo-available.png' alt='none' />}
 				{!cover_photo && this.props.deleteTour &&
 					<div>
 						<input ref={this.photoInput} accept="image/*" style={{display: 'none'}} type="file" onChange={() => this.getSig(this.photoInput.current.files[0])} />

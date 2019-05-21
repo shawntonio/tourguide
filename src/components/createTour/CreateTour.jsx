@@ -52,15 +52,17 @@ class TourInfo extends Component {
 					<h2>Create a Tour</h2>
 				</header>
 				<form onSubmit={this.createTourHandler} className='create-tour-form'>
-					<div className="inputs">
+					<div className="inputs" id='tour-name-input'>
 						<label>Tour Name:</label>
 						<input name='name' value={name} type="text" onChange={this.inputHandler} />
 					</div>
 
-					<div className='choose-create'>
-						<label htmlFor="">Choose Starting Location</label>
+					<div id='click-map-label'>
+						<label >Click on map to select starting location</label>
+					</div>
 
-						<button>Create Tour</button>
+					<div id='click-map-label'>
+						{this.state.addMarkerLatLng && <button>Create Tour</button>}
 					</div>
 				</form>
 

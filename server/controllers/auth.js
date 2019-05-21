@@ -3,7 +3,9 @@ const bcrypt = require('bcryptjs');
 module.exports = {
 	async register(req, res) {
 		const db = req.app.get('db')
-		const {email, firstname, lastname, username, password} = req.body
+		let {email, firstname, lastname, username, password} = req.body
+		email = email.toLowerCase()
+		username = username.toLowerCase()
 		const {session} = req
 
 		//check for duplicate accounts

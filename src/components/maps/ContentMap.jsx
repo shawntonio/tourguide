@@ -18,7 +18,6 @@ class ContentMap extends Component {
 
 	componentDidMount() {
 		if (this.props.content[0]) this.getPolyline()
-		console.log(this.props.google)
 	}
 
 	componentDidUpdate(prevProps) {
@@ -50,12 +49,10 @@ class ContentMap extends Component {
 		}
 
 		directionsService.route(request, (result, status) => {
-			console.log(status)
 			if (status === 'OK') {
-				console.log(result)
 				this.setState({ polyline: result.routes[0].overview_path })
 				this.props.search && this.setLegs(result.routes[0].legs)
-			} else if (status === 'ZERO_RESULTS') {
+			} else if (status === 'ZERO_RESULTS' && this.props.startLocation.lat) {
 				window.location.reload()
 			}
 		})

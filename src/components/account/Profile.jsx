@@ -12,9 +12,7 @@ class Profile extends Component {
 		super()
 		this.imgInput = React.createRef()
 		this.state = {
-			userInfo: {},
-			uploadImg: 'https://britz.mcmaster.ca/images/nouserimage.gif/image'
-		}
+			userInfo: {}		}
 	}
 
 	componentDidMount() {
@@ -31,7 +29,6 @@ class Profile extends Component {
 	getUserInfo = () => {
 		Axios.get(`/user?id=${this.props.login_id}`).then(res => {
 			this.setState({ userInfo: res.data })
-			console.log(res.data)
 		})
 	}
 
@@ -45,7 +42,6 @@ class Profile extends Component {
 			}
 		}).then(res => {
 			const { signedRequest, url } = res.data
-			this.setState({uploadImg: url})
 			this.uploadFile(file, signedRequest, url)
 		})
 	}
@@ -59,6 +55,7 @@ class Profile extends Component {
 
 		Axios.put(signedRequest, file, options).then(() => {
 			Axios.put(`/user`, {...this.state.userInfo, profile_pic: url})
+			.then(() => this.getUserInfo())
 		})
 	}
 
@@ -75,7 +72,7 @@ class Profile extends Component {
 						{profile_pic ? <img className='profile-pic' src={profile_pic} alt="profile_pic" />
 							: <div>
 								<div className='profile-pic'>
-									<img src={this.state.uploadImg} alt='none' />
+									<img src='https://britz.mcmaster.ca/images/nouserimage.gif/imag' alt='none' />
 								</div>
 								<input ref={this.imgInput} accept="image/*" style={{display: 'none'}} type="file" onChange={() => this.getSig(this.imgInput.current.files[0])} />
 								<p onClick={this.clickImgInput}>Add Picture</p>

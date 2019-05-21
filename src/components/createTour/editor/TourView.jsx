@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import ContentMap from '../../maps/ContentMap'
 import EditorHeader from './EditorHeader'
 import Recorder from '../recorder/Recorder'
+import {setLocation} from '../../../store'
 
 class TourView extends Component {
 
@@ -17,7 +18,11 @@ class TourView extends Component {
 		loadMap: false,
 		addMarkerLatLng: null,
 		prompt: 'Click map to add point of interest',
-		legs: {}
+		legs: null,
+		watchId: null,
+		directions: '',
+		legIteration: 0,
+		stepIteration: 0
 	}
 
 	async componentDidMount() {
@@ -28,6 +33,25 @@ class TourView extends Component {
 		}).catch(err => console.log(err))
 
 		this.getContent()
+
+		const watchId = navigator.geolocation.watchPosition(this.geoSuccess, () => alert('position not available'), {
+			enableHighAccuracy: true, 
+			maximumAge        : 30000, 
+			timeout           : 27000
+		})
+
+		this.setState({watchId})
+	}
+
+	componentWillUnmount(){
+		navigator.geolocation.clearWatch(this.state.watchId)
+	}
+
+	geoSuccess = position => {
+		const {legIteration, stepIteration, legs} = this.state
+		const location = {lat: position.coords.latitude, lng: position.coords.longitude}
+		this.props.setLocation(location)
+		if (legs) this.setState({directions: legs[legIteration].steps[stepIteration].instructions})
 	}
 
 	getContent= () => {
@@ -47,7 +71,6 @@ class TourView extends Component {
 	deleteContent = () => {
 		axios.delete(`/api/content/${this.state.activeMarker.contentId}`)
 			.then(() => {
-				console.log('hit')
 				this.componentDidMount()
 				this.setState({ activeMarker: {}, showInfoWindow: false })
 			})
@@ -75,6 +98,9 @@ class TourView extends Component {
 	}
 
 	render() {
+		console.log(this.state.legs)
+
+
 		const { id } = this.props.match.params
 		const { user_id, name, id: tourId, lat, lng } = this.state.tour
 
@@ -93,6 +119,7 @@ class TourView extends Component {
 					/>}
 
 					{!this.state.addMarkerLatLng && !this.state.showInfoWindow && !this.props.location.search && <p className='prompt'>{this.state.prompt}</p>}
+					{this.props.location.search && this.state.directions}
 
 					{this.state.addMarkerLatLng && <Recorder 
 						addMarkerLatLng={this.state.addMarkerLatLng}
@@ -130,4 +157,8 @@ const mapStateToProps = state => {
 	return { login_id, loc }
 }
 
-export default connect(mapStateToProps)(withRouter(TourView))
+const mapDispatchToState = {
+	setLocation
+}
+
+export default connect(mapStateToProps, mapDispatchToState)(withRouter(TourView))
