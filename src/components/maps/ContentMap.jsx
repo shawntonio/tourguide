@@ -69,6 +69,7 @@ class ContentMap extends Component {
 
 	markerClick = (props, marker) => {
 		this.props.setMarker(marker, true)
+		console.log(marker)
 	}
 
 	clearActiveMarker = () => {
@@ -116,6 +117,7 @@ class ContentMap extends Component {
 				/>}
 				{this.props.content[0] && this.props.search && <Marker
 					position={{ lat, lng }}
+					name={'me'}
 					icon={{
 						url: profile,
 						anchor: new this.props.google.maps.Point(15,15),

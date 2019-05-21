@@ -13,6 +13,7 @@ class TourView extends Component {
 	constructor() {
 		super()
 		this.dirRef = React.createRef()
+		this.nearByAudio = React.createRef()
 		this.state = {
 			tour: {},
 			content: [],
@@ -26,7 +27,8 @@ class TourView extends Component {
 			directions: '',
 			legIteration: 0,
 			stepIteration: 0,
-			myLocation: null
+			myLocation: null,
+			played: null
 		}
 	}
 
@@ -56,18 +58,38 @@ class TourView extends Component {
 		if (prevProps.loc.lat !== this.props.loc.lat) {
 			const { legIteration, stepIteration, legs } = this.state
 			const location = { lat: this.props.loc.lat, lng: this.props.loc.lng }
-			let currentStep
-			if (legs) { 
-				currentStep =	legs[legIteration].steps[stepIteration]
-				console.log(currentStep.end_point.lat(), currentStep.end_point.lng())
-			}
-			if (legs && location.lat === currentStep.end_point.lat() && location.lng === currentStep.end_point.lng()) {
-				if (legs.steps.length - 1 === stepIteration && legs.length - 1 === legIteration) {
-					this.setState({directions: 'Woo Hoo! You finished the tour'})
-				} else if (legs.steps.length - 1 === stepIteration) {
-					this.setState({legIteration: legIteration + 1})
-				} else {
-					this.setState({stepIteration: stepIteration + 1})
+			const offset = 0.001
+
+			//check if near poi
+			this.state.content.forEach(poi => {
+				if (poi.lat + offset > location.lat && poi.lat - offset < location.lat) {
+					if (poi.lng + offset > location.lng && poi.lng - offset < location.lng) {
+						if (poi.id !== this.state.played) {
+							this.nearByAudio.current.autoplay = true;
+							this.nearByAudio.current.controls = true;
+							this.nearByAudio.current.src = poi.url;
+							console.log('should play')
+							this.setState({played: poi.id})
+						}
+					}
+				}
+			})
+			if (legs) {
+				const currentStep = legs[legIteration].steps[stepIteration]
+
+				//check if at end of step
+				if (location.lat + offset > currentStep.end_point.lat() && 
+				location.lat - offset < currentStep.end_point.lat()) {
+					if (location.lng + offset > currentStep.end_point.lng() &&
+					location.lng - offset < currentStep.end_point.lng()) {
+						if (legs[legIteration].steps.length - 1 === stepIteration && legs.length - 1 === legIteration) {
+							this.setState({ directions: 'Woo Hoo! You finished the tour' })
+						} else if (legs[legIteration].steps.length - 1 === stepIteration) {
+							this.setState({ legIteration: legIteration + 1 })
+						} else {
+							this.setState({ stepIteration: stepIteration + 1 })
+						}
+				}
 				}
 			}
 		}
@@ -126,13 +148,10 @@ class TourView extends Component {
 	}
 
 	findMyLocation = () => {
-		this.setState({myLocation: this.props.loc})
+		this.setState({ myLocation: this.props.loc })
 	}
 
 	render() {
-		console.log(this.state.legs)
-
-
 		const { id } = this.props.match.params
 		const { user_id, name, id: tourId, lat, lng } = this.state.tour
 
@@ -152,6 +171,10 @@ class TourView extends Component {
 
 					{!this.state.addMarkerLatLng && !this.state.showInfoWindow && !this.props.location.search && <p className='prompt'>{this.state.prompt}</p>}
 					{this.props.location.search && <p dangerouslySetInnerHTML={{ __html: this.state.directions }} className='directions'></p>}
+
+					<div className="header-audio">
+						<audio ref={this.nearByAudio}></audio>
+					</div>
 
 					{this.state.addMarkerLatLng && <Recorder
 						addMarkerLatLng={this.state.addMarkerLatLng}
