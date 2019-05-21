@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Axios from 'axios';
-import {v4 as randomString} from 'uuid';
+import { v4 as randomString } from 'uuid';
+import ReactLoading from 'react-loading';
 
 export default class Recorder extends Component {
 	constructor(props) {
@@ -11,38 +12,39 @@ export default class Recorder extends Component {
 			mediaRecorder: null,
 			chunks: [],
 			blob: null,
-			recording: false
+			recording: false,
+			loading: false
 		}
 	}
-	componentDidMount(){
+	componentDidMount() {
 		navigator.geolocation.getCurrentPosition(position => {
-			const {latitude: lat, longitude: lng} = position.coords
-			this.setState({location: {lat, lng}})
+			const { latitude: lat, longitude: lng } = position.coords
+			this.setState({ location: { lat, lng } })
 		})
 
 		if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-			navigator.mediaDevices.getUserMedia({audio: true})
-			.then(stream => {
-				const mediaRecorder = new MediaRecorder(stream)
-				this.setState({
-					mediaRecorder
-				})
-				//listeners
-				mediaRecorder.ondataavailable = e => {
-					this.state.chunks.push(e.data)
-				}
-					
-				mediaRecorder.onstop = e => {
-					const {chunks} = this.state
+			navigator.mediaDevices.getUserMedia({ audio: true })
+				.then(stream => {
+					const mediaRecorder = new MediaRecorder(stream)
 					this.setState({
-						blob: new Blob(chunks, { 'type' : chunks[0].type}),
-						chunks: []
+						mediaRecorder
 					})
+					//listeners
+					mediaRecorder.ondataavailable = e => {
+						this.state.chunks.push(e.data)
+					}
 
-					this.audioRef.current.src = URL.createObjectURL(this.state.blob)
-				}
-			})
-			.catch(err => console.log(err))
+					mediaRecorder.onstop = e => {
+						const { chunks } = this.state
+						this.setState({
+							blob: new Blob(chunks, { 'type': chunks[0].type }),
+							chunks: []
+						})
+
+						this.audioRef.current.src = URL.createObjectURL(this.state.blob)
+					}
+				})
+				.catch(err => console.log(err))
 		} else {
 			console.log('getUserMedia not supported on your browser!')
 		}
@@ -50,18 +52,18 @@ export default class Recorder extends Component {
 
 	getSig = (blob, location, tourId) => {
 		const filename = `tour${tourId}content${randomString()}`
-	
+
 		Axios.get('/api/sig', {
 			params: {
 				filename,
 				filetype: blob.type
 			}
 		}).then(res => {
-			const {signedRequest, url} = res.data
+			const { signedRequest, url } = res.data
 			this.uploadBlob(blob, signedRequest, url, location, filename, tourId)
 		}).catch(err => console.log(err))
 	}
-	
+
 	uploadBlob = (blob, signedRequest, url, location, object_key, tour_id) => {
 		const options = {
 			headers: {
@@ -69,36 +71,38 @@ export default class Recorder extends Component {
 			},
 		}
 		Axios.put(signedRequest, blob, options)
-		.then(() => {
-			Axios.post('/api/content', {url, tour_id, location, object_key})
 			.then(() => {
-				this.props.clearAddMarker()
-				this.props.changePrompt('Click marker to edit point of interest')
+				Axios.post('/api/content', { url, tour_id, location, object_key })
+					.then(() => {
+						this.setState({ loading: false })
+						this.props.clearAddMarker()
+						this.props.changePrompt('Click marker to edit point of interest')
+					})
+					.catch(err => console.log(err))
 			})
 			.catch(err => console.log(err))
-		})
-		.catch(err => console.log(err))
 	}
 
 	startRecording = () => {
-		const {mediaRecorder} = this.state
-		this.setState({recording: true})
+		const { mediaRecorder } = this.state
+		this.setState({ recording: true })
 		mediaRecorder.start(100)
 	}
-	
+
 	stopRecording = () => {
-		this.setState({recording: false})
+		this.setState({ recording: false })
 		this.state.mediaRecorder.stop()
 	}
-	
+
 	addPOI = () => {
+		this.setState({ loading: true })
 		const lat = this.props.addMarkerLatLng.lat()
 		const lng = this.props.addMarkerLatLng.lng()
-		this.getSig(this.state.blob, {lat, lng}, this.props.tourId)
+		this.getSig(this.state.blob, { lat, lng }, this.props.tourId)
 	}
 
 	render() {
-		return(
+		return (
 			<div className='recorder'>
 				<div className="recordButtons">
 					<div className={`${this.state.recording ? 'hide' : null}`} ref={this.soundBar}>
@@ -108,10 +112,10 @@ export default class Recorder extends Component {
 						<i className={`fas fa-stop-circle fa-2x ${!this.state.recording ? 'hide' : null}`} onClick={this.stopRecording}></i>
 					</div>
 				</div>
-				{/* <div className="sound-bar" ref={this.soundBar}></div> */}
 				{this.state.blob && <div className='audio-controls'>
-					<audio ref={this.audioRef} controls ></audio> 
+					<audio ref={this.audioRef} controls ></audio>
 					<button onClick={this.addPOI}>Add Point of Interest</button>
+					{this.state.loading && <ReactLoading type={'spokes'} color={'#12135A'} />}
 				</div>}
 			</div>
 		)

@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { v4 as randomString } from 'uuid';
+import ReactLoading from 'react-loading';
 
 
 import { clearUser } from '../../store'
@@ -12,10 +13,13 @@ class Profile extends Component {
 		super()
 		this.imgInput = React.createRef()
 		this.state = {
-			userInfo: {}		}
+			userInfo: {},
+			loading: false		
+		}
 	}
 
 	componentDidMount() {
+		if (!this.userInfo) this.setState({loading: true})
 		this.props.previousPageReturn()
 		this.getUserInfo()
 	}
@@ -28,7 +32,7 @@ class Profile extends Component {
 
 	getUserInfo = () => {
 		Axios.get(`/user?id=${this.props.login_id}`).then(res => {
-			this.setState({ userInfo: res.data })
+			this.setState({ loading: false, userInfo: res.data })
 		})
 	}
 
@@ -83,6 +87,8 @@ class Profile extends Component {
 					<p>{this.props.username}</p>
 					<p>{email}</p>
 				</div>}
+
+				{this.state.loading && <ReactLoading id='loader' type={'spokes'} color={'#12135A'} />}
 
 				<button onClick={this.logout}>Logout</button>
 				<button onClick={() => this.props.history.push('/workbench')}>Tour Work Bench</button>

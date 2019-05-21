@@ -62,13 +62,12 @@ class TourView extends Component {
 
 			//check if near poi
 			this.state.content.forEach(poi => {
-				if (poi.lat + offset > location.lat && poi.lat - offset < location.lat) {
+				if (this.props.location.search && poi.lat + offset > location.lat && poi.lat - offset < location.lat) {
 					if (poi.lng + offset > location.lng && poi.lng - offset < location.lng) {
 						if (poi.id !== this.state.played) {
 							this.nearByAudio.current.autoplay = true;
 							this.nearByAudio.current.controls = true;
 							this.nearByAudio.current.src = poi.url;
-							console.log('should play')
 							this.setState({played: poi.id})
 						}
 					}
@@ -130,7 +129,8 @@ class TourView extends Component {
 	mapClicked = (latLng) => {
 		this.setState({
 			addMarkerLatLng: latLng,
-			showInfoWindow: false
+			showInfoWindow: false,
+			myLocation: null
 		})
 	}
 

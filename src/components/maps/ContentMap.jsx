@@ -28,35 +28,37 @@ class ContentMap extends Component {
 	}
 
 	async getPolyline() {
-		const directionsService = await new this.props.google.maps.DirectionsService()
-			
-		const { lat, lng } = this.props.startLocation
-		const { lat: latd, lng: lngd } = this.props.content[this.props.content.length - 1]
-		const origin = await new this.props.google.maps.LatLng(lat, lng)
-		const destination = await new this.props.google.maps.LatLng(latd, lngd)
-
-		const wayPoints = this.props.content.slice(0, this.props.content.length - 1).map(content => {
-			const { lat, lng } = content
-			const location = new this.props.google.maps.LatLng(lat, lng)
-			return { location }
-		})
-
-		const request = {
-			origin,
-			destination,
-			travelMode: 'WALKING',
-			waypoints: wayPoints,
-			optimizeWaypoints: true
-		}
-
-		directionsService.route(request, (result, status) => {
-			if (status === 'OK') {
-				this.setState({ polyline: result.routes[0].overview_path })
-				this.props.search && this.setLegs(result.routes[0].legs)
-			} else if (status === 'ZERO_RESULTS' && this.props.startLocation.lat) {
-				window.location.reload()
+		if (this.props.content[0]) {
+			const directionsService = await new this.props.google.maps.DirectionsService()
+				
+			const { lat, lng } = this.props.startLocation
+			const { lat: latd, lng: lngd } = this.props.content[this.props.content.length - 1]
+			const origin = await new this.props.google.maps.LatLng(lat, lng)
+			const destination = await new this.props.google.maps.LatLng(latd, lngd)
+	
+			const wayPoints = this.props.content.slice(0, this.props.content.length - 1).map(content => {
+				const { lat, lng } = content
+				const location = new this.props.google.maps.LatLng(lat, lng)
+				return { location }
+			})
+	
+			const request = {
+				origin,
+				destination,
+				travelMode: 'WALKING',
+				waypoints: wayPoints,
+				optimizeWaypoints: true
 			}
-		})
+	
+			directionsService.route(request, (result, status) => {
+				if (status === 'OK') {
+					this.setState({ polyline: result.routes[0].overview_path })
+					this.props.search && this.setLegs(result.routes[0].legs)
+				} else if (status === 'ZERO_RESULTS' && this.props.startLocation.lat) {
+					window.location.reload()
+				}
+			})
+		}
 	}
 
 	setLegs = legs => {
@@ -69,7 +71,6 @@ class ContentMap extends Component {
 
 	markerClick = (props, marker) => {
 		this.props.setMarker(marker, true)
-		console.log(marker)
 	}
 
 	clearActiveMarker = () => {
@@ -139,6 +140,7 @@ class ContentMap extends Component {
 				{this.props.myLocation && <Marker 
 					name={'addContent'}
 					position={{ lat: this.props.myLocation.lat, lng: this.props.myLocation.lng}}
+					onClick={this.mapClicked}
 					icon={{
 						url: crossHair,
 						anchor: new this.props.google.maps.Point(10,10),
