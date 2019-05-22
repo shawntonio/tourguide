@@ -54,7 +54,7 @@ class TourView extends Component {
 		navigator.geolocation.clearWatch(this.state.watchId)
 	}
 
-	componentDidUpdate(prevProps) {
+	componentDidUpdate(prevProps,prevState) {
 		if (prevProps.loc.lat !== this.props.loc.lat) {
 			const { legIteration, stepIteration, legs } = this.state
 			const location = { lat: this.props.loc.lat, lng: this.props.loc.lng }
@@ -65,9 +65,15 @@ class TourView extends Component {
 				if (this.props.location.search && poi.lat + offset > location.lat && poi.lat - offset < location.lat) {
 					if (poi.lng + offset > location.lng && poi.lng - offset < location.lng) {
 						if (poi.id !== this.state.played) {
+							navigator.geolocation.clearWatch(this.state.watchId)
 							this.nearByAudio.current.autoplay = true;
 							this.nearByAudio.current.controls = true;
 							this.nearByAudio.current.src = poi.url;
+							this.nearByAudio.current.onended = () => navigator.geolocation.watchPosition(this.geoSuccess, () => alert('position not available'), {
+								enableHighAccuracy: true,
+								maximumAge: 30000,
+								timeout: 27000
+							})
 							this.setState({played: poi.id})
 						}
 					}
@@ -160,7 +166,7 @@ class TourView extends Component {
 
 				<header style={{ marginBottom: '15px' }}>
 					<div className="tour-view-title" >
-						<i className="fas fa-chevron-left" onClick={() => this.props.history.goBack()}></i>
+						<i className="fas fa-chevron-left back" onClick={() => this.props.history.goBack()}></i>
 						<h2>{name}</h2>
 						{!this.props.location.search && <input type="text" name="search" id="" placeholder="search" className="map-search" />}
 					</div>
@@ -181,6 +187,7 @@ class TourView extends Component {
 						tourId={tourId}
 						clearAddMarker={this.clearAddMarker}
 						changePrompt={this.changePrompt}
+						watchId={this.state.watchId}
 					/>}
 
 				</header>

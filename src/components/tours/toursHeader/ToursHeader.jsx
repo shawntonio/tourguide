@@ -5,7 +5,7 @@ const ToursHeader = (props) => (
 	<header>
 		<div className="tours-header">
 			<Link className='link' to='/'>
-				<h1 className='logo'>dTOUR</h1>
+				<h1 className='logo'>d<span className='tour-span'>TOUR</span></h1>
 			</Link>
 			<Link to='/tour-info'>
 				<button>

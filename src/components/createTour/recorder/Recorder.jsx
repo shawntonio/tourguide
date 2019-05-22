@@ -48,6 +48,12 @@ export default class Recorder extends Component {
 		} else {
 			console.log('getUserMedia not supported on your browser!')
 		}
+		this.audioRef.current.onplay(() => navigator.geolocation.clearWatch(this.props.watchId))
+		this.audioRef.current.onstop(() => navigator.geolocation.watchPosition(this.geoSuccess, () => alert('position not available'), {
+			enableHighAccuracy: true,
+			maximumAge: 30000,
+			timeout: 27000
+		}))
 	}
 
 	getSig = (blob, location, tourId) => {

@@ -71,7 +71,6 @@ class Profile extends Component {
 		return (
 			<div className='profile'>
 				{firstname && <div>
-
 					<div className='profile'>
 						{profile_pic ? <img className='profile-pic' src={profile_pic} alt="profile_pic" />
 							: <div>
@@ -91,7 +90,7 @@ class Profile extends Component {
 				{this.state.loading && <ReactLoading id='loader' type={'spokes'} color={'#12135A'} />}
 
 				<button onClick={this.logout}>Logout</button>
-				<button onClick={() => this.props.history.push('/workbench')}>Tour Work Bench</button>
+				<button onClick={() => this.props.history.push('/workbench')}>Tour Guide Admin</button>
 			</div>
 		)
 	}
