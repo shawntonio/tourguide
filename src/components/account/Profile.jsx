@@ -5,8 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { v4 as randomString } from 'uuid';
 import ReactLoading from 'react-loading';
 
-
-import { clearUser } from '../../store'
+import { clearUser } from '../../store';
 
 class Profile extends Component {
 	constructor() {
@@ -46,6 +45,7 @@ class Profile extends Component {
 			}
 		}).then(res => {
 			const { signedRequest, url } = res.data
+			this.setState({userInfo: {...this.state.userInfo, profile_pic: url}})
 			this.uploadFile(file, signedRequest, url)
 		})
 	}
@@ -59,7 +59,9 @@ class Profile extends Component {
 
 		Axios.put(signedRequest, file, options).then(() => {
 			Axios.put(`/user`, {...this.state.userInfo, profile_pic: url})
-			.then(() => this.getUserInfo())
+			.then(() => {
+				this.getUserInfo()
+			})
 		})
 	}
 
@@ -72,10 +74,11 @@ class Profile extends Component {
 			<div className='profile'>
 				{firstname && <div>
 					<div className='profile'>
+						{console.log(profile_pic)}
 						{profile_pic ? <img className='profile-pic' src={profile_pic} alt="profile_pic" />
 							: <div>
 								<div className='profile-pic'>
-									<img src='https://britz.mcmaster.ca/images/nouserimage.gif/imag' alt='none' />
+									<img src='https://s3.amazonaws.com/wll-community-production/images/no-avatar.png' alt='none' />
 								</div>
 								<input ref={this.imgInput} accept="image/*" style={{display: 'none'}} type="file" onChange={() => this.getSig(this.imgInput.current.files[0])} />
 								<p onClick={this.clickImgInput}>Add Picture</p>
