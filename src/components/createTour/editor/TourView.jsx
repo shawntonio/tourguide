@@ -41,13 +41,7 @@ class TourView extends Component {
 
 		this.getContent()
 
-		const watchId = navigator.geolocation.watchPosition(this.geoSuccess, () => alert('position not available'), {
-			enableHighAccuracy: true,
-			maximumAge: 30000,
-			timeout: 27000
-		})
-
-		this.setState({ watchId })
+		this.setWatchPos()
 	}
 
 	componentWillUnmount() {
@@ -100,6 +94,17 @@ class TourView extends Component {
 		}
 	}
 
+	setWatchPos = () => {
+		const watchId = navigator.geolocation.watchPosition(this.geoSuccess, () => alert('position not available'), {
+			enableHighAccuracy: true,
+			maximumAge: 30000,
+			timeout: 27000
+		})
+
+		this.setState({ watchId })
+	}
+
+
 	geoSuccess = position => {
 		const { legIteration, stepIteration, legs } = this.state
 		const location = { lat: position.coords.latitude, lng: position.coords.longitude }
@@ -120,6 +125,7 @@ class TourView extends Component {
 	}
 
 	setMarker = (marker, bool) => {
+		navigator.geolocation.clearWatch(this.state.watchId)
 		this.setState({ activeMarker: marker, showInfoWindow: bool })
 	}
 
@@ -133,6 +139,7 @@ class TourView extends Component {
 	}
 
 	mapClicked = (latLng) => {
+		this.setWatchPos()
 		this.setState({
 			addMarkerLatLng: latLng,
 			showInfoWindow: false,
@@ -199,6 +206,7 @@ class TourView extends Component {
 					startLocation={{ lat, lng }}
 					{...this.state}
 					myLocation={this.state.myLocation}
+					setWatchPos={this.setWatchPos}
 				/></div>}
 
 				{this.state.loadMap && this.props.location.search && <div className='map'><ContentMap
@@ -208,6 +216,7 @@ class TourView extends Component {
 					search
 					startLocation={{ lat: this.props.loc.lat, lng: this.props.loc.lng }}
 					{...this.state}
+					setWatchPos={this.setWatchPos}
 				/></div>}
 
 				<i onClick={this.findMyLocation} id='find-my-location' className="fas fa-crosshairs fa-2x"></i>

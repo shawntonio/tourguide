@@ -74,6 +74,7 @@ class ContentMap extends Component {
 	}
 
 	clearActiveMarker = () => {
+		this.props.setWatchPos()
 		this.props.setMarker({}, false)
 	}
 

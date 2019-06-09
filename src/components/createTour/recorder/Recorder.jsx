@@ -117,8 +117,9 @@ export default class Recorder extends Component {
 		return (
 			<div className='recorder'>
 				<div className="recordButtons">
-					<div className={`${this.state.recording ? 'hide' : null}`} ref={this.soundBar}>
-						<i className={`fas fa-dot-circle fa-2x ${this.state.recording ? 'hide' : null}`} onClick={this.startRecording}></i>
+					<div style={{display: 'flex', alignItems: 'center'}} className={`${this.state.recording ? 'hide' : null}`} ref={this.soundBar}>
+						<span style={{marginRight: '20px'}}>record</span>
+						<i style={{backgroundColor: 'red', borderRadius: '50%'}} className={`fas fa-dot-circle fa-2x ${this.state.recording ? 'hide' : null}`} onClick={this.startRecording}></i>
 					</div>
 					<div className={`recording ${!this.state.recording ? 'hide' : null}`} ref={this.soundBar}>
 						<i className={`fas fa-stop-circle fa-2x ${!this.state.recording ? 'hide' : null}`} onClick={this.stopRecording}></i>
